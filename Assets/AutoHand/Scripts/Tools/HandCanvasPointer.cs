@@ -16,14 +16,14 @@ public class HandCanvasPointer : MonoBehaviour
     public float raycastLength = 8.0f;
     public bool autoShowTarget = true;
     public LayerMask UILayer;
-    
+
 
     [Header("Events")]
     public UnityEvent StartSelect;
     public UnityEvent StopSelect;
     public UnityEvent StartPoint;
     public UnityEvent StopPoint;
-    
+
     // Internal variables
     private bool hover = false;
     AutoInputModule inputModule;
@@ -33,7 +33,8 @@ public class HandCanvasPointer : MonoBehaviour
 
     int pointerIndex;
 
-    void OnEnable() {
+    void OnEnable()
+    {
         if (cam == null)
         {
             cam = new GameObject("Camera Canvas Pointer (I AM CREATED AT RUNTIME FOR UI CANVAS INTERACTION, I AM NOT RENDERING ANYTHING, I AM NOT CREATING ADDITIONAL OVERHEAD, THANK YOU FOR READING MY STORY)").AddComponent<Camera>();
@@ -48,12 +49,13 @@ public class HandCanvasPointer : MonoBehaviour
             cam.enabled = false;
             cam.fieldOfView = 0.00001f;
 
-            foreach (var canvas in FindObjectsOfType<Canvas>()){
+            foreach (var canvas in FindObjectsOfType<Canvas>())
+            {
                 canvas.worldCamera = cam;
             }
         }
 
-        if(inputModule.Instance != null)
+        if (inputModule.Instance != null)
             pointerIndex = inputModule.Instance.AddPointer(this);
     }
 
@@ -79,7 +81,7 @@ public class HandCanvasPointer : MonoBehaviour
         inputModule.ProcessPress(pointerIndex);
 
         // Show the ray when they attemp to press
-        if(!autoShowTarget && hover) ShowRay(true);
+        if (!autoShowTarget && hover) ShowRay(true);
 
         // Fire the Unity event
         StartSelect?.Invoke();
@@ -89,7 +91,7 @@ public class HandCanvasPointer : MonoBehaviour
     {
         // Handle the UI events
         inputModule.ProcessRelease(pointerIndex);
-        
+
         // Fire the Unity event
         StopSelect?.Invoke();
     }
@@ -99,11 +101,14 @@ public class HandCanvasPointer : MonoBehaviour
         if (lineRenderer == null)
             gameObject.CanGetComponent(out lineRenderer);
 
-        if(inputModule == null) {
-            if(gameObject.CanGetComponent<AutoInputModule>(out var inputMod)) {
+        if (inputModule == null)
+        {
+            if (gameObject.CanGetComponent<AutoInputModule>(out var inputMod))
+            {
                 inputModule = inputMod;
             }
-            else if (!(inputModule = FindObjectOfType<AutoInputModule>())) {
+            else if (!(inputModule = FindObjectOfType<AutoInputModule>()))
+            {
                 EventSystem system;
                 if (system = FindObjectOfType<EventSystem>())
                     inputModule = system.gameObject.AddComponent<AutoInputModule>();
@@ -127,11 +132,11 @@ public class HandCanvasPointer : MonoBehaviour
             StartPoint?.Invoke();
 
             // Show the ray if autoShowTarget is on when they enter the canvas
-            if(autoShowTarget) ShowRay(true);
+            if (autoShowTarget) ShowRay(true);
 
             hover = true;
         }
-        else if(data.pointerCurrentRaycast.distance == 0 && hover)
+        else if (data.pointerCurrentRaycast.distance == 0 && hover)
         {
             // Fire the Unity event
             StopPoint?.Invoke();
@@ -146,7 +151,7 @@ public class HandCanvasPointer : MonoBehaviour
 
         Vector3 endPosition = transform.position + (transform.forward * targetLength);
 
-        if(hit.collider) endPosition = hit.point;
+        if (hit.collider) endPosition = hit.point;
 
         //Handle the hitmarker
         hitPointMarker.transform.position = endPosition;

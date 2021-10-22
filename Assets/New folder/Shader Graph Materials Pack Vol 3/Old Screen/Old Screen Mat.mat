@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Old Screen Mat
+  m_Shader: {fileID: -6465566751694194690, guid: 80259f526609e7445b43371afe8998f1,
+    type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - Texture2D_28E54D14:
+        m_Texture: {fileID: 2800000, guid: 7801804018a7dcf42abb827444e18660, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_2EA48A3C:
+        m_Texture: {fileID: 2800000, guid: 15bc670bf03a4a2409784ea1a164a48f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_52A5121F: 3.7
+    - Vector1_545146DC: 0.292
+    - Vector1_764C54BF: 48.5
+    - Vector1_800A47ED: 0.333
+    - Vector1_9DF658AC: 0.64
+    - Vector1_EC5AD308: 1.6
+    m_Colors:
+    - Vector4_C8178947: {r: 1.2, g: 1.2, b: 0, a: 0}

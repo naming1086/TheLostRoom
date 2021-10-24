@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class SoundLampCtrl : MonoBehaviour
 {
+    public LostStoryRecorder lostStoryRecorder;
+
     public bool onButton;
+    public bool offButton;
+
     public GameObject recordButton;
     public GameObject lampBody;
 
@@ -26,10 +30,14 @@ public class SoundLampCtrl : MonoBehaviour
             if (!onButton)          // 버튼이 off일 경우 버튼 on
             {
                 onButton = true;
+
+                lostStoryRecorder.StartRecord();
             }
             else
             {
                 onButton = false;   // 버튼이 on일 경우 버튼 off
+
+                lostStoryRecorder.StopRecord();
             }
         }
 

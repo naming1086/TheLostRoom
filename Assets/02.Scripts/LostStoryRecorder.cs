@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class LostStoryRecorder : MonoBehaviour
 {
-    public SoundLampCtrl soundLampCtrl;
-
     public int recordTime;
     public int resultValue;
     public int cutValue = 15;
@@ -50,8 +48,8 @@ public class LostStoryRecorder : MonoBehaviour
         {
             Microphone.End(Microphone.devices[0]);  // 녹음 중지
 
-            float[] samples = new float[audio.clip.samples];
-            audio.clip.GetData(samples, 0);
+            // float[] samples = new float[audio.clip.samples];
+            // audio.clip.GetData(samples, 0);
 
         }
     }

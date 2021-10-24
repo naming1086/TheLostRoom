@@ -10839,107 +10839,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 30
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1224048207 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2961823131951332562, guid: b5acfde7fea2dce4da1674083c97be9f, type: 3}
-  m_PrefabInstance: {fileID: 2961823132904937011}
-  m_PrefabAsset: {fileID: 0}
---- !u!153 &1224048208
-ConfigurableJoint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1224048207}
-  m_ConnectedBody: {fileID: 1792273746}
-  m_ConnectedArticulationBody: {fileID: 0}
-  m_Anchor: {x: -0.012, y: 0, z: 0}
-  m_Axis: {x: 1, y: 0, z: 0}
-  m_AutoConfigureConnectedAnchor: 0
-  m_ConnectedAnchor: {x: -0.023, y: 0.105, z: 0}
-  serializedVersion: 2
-  m_SecondaryAxis: {x: 1, y: 0, z: 0}
-  m_XMotion: 1
-  m_YMotion: 0
-  m_ZMotion: 0
-  m_AngularXMotion: 0
-  m_AngularYMotion: 0
-  m_AngularZMotion: 0
-  m_LinearLimitSpring:
-    spring: 0
-    damper: 0
-  m_LinearLimit:
-    limit: 0.012
-    bounciness: 0
-    contactDistance: 0
-  m_AngularXLimitSpring:
-    spring: 0
-    damper: 0
-  m_LowAngularXLimit:
-    limit: 0
-    bounciness: 0
-    contactDistance: 0
-  m_HighAngularXLimit:
-    limit: 0
-    bounciness: 0
-    contactDistance: 0
-  m_AngularYZLimitSpring:
-    spring: 0
-    damper: 0
-  m_AngularYLimit:
-    limit: 0
-    bounciness: 0
-    contactDistance: 0
-  m_AngularZLimit:
-    limit: 0
-    bounciness: 0
-    contactDistance: 0
-  m_TargetPosition: {x: 0, y: 0, z: 0}
-  m_TargetVelocity: {x: 0, y: 0, z: 0}
-  m_XDrive:
-    serializedVersion: 3
-    positionSpring: 0
-    positionDamper: 0
-    maximumForce: 3.4028233e+38
-  m_YDrive:
-    serializedVersion: 3
-    positionSpring: 0
-    positionDamper: 0
-    maximumForce: 3.4028233e+38
-  m_ZDrive:
-    serializedVersion: 3
-    positionSpring: 0
-    positionDamper: 0
-    maximumForce: 3.4028233e+38
-  m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 0
-  m_AngularXDrive:
-    serializedVersion: 3
-    positionSpring: 0
-    positionDamper: 0
-    maximumForce: 3.4028233e+38
-  m_AngularYZDrive:
-    serializedVersion: 3
-    positionSpring: 0
-    positionDamper: 0
-    maximumForce: 3.4028233e+38
-  m_SlerpDrive:
-    serializedVersion: 3
-    positionSpring: 0
-    positionDamper: 0
-    maximumForce: 3.4028233e+38
-  m_ProjectionMode: 0
-  m_ProjectionDistance: 0.1
-  m_ProjectionAngle: 180
-  m_ConfiguredInWorldSpace: 0
-  m_SwapBodies: 0
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_EnableCollision: 0
-  m_EnablePreprocessing: 1
-  m_MassScale: 1
-  m_ConnectedMassScale: 1
 --- !u!1001 &1247768812
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17428,7 +17327,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1786503203606054, guid: 2905acef1a365af46be8bcfa1a41ae87, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 16
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4246063558298672, guid: 2905acef1a365af46be8bcfa1a41ae87, type: 3}
       propertyPath: m_RootOrder
@@ -19201,33 +19100,29 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1792273743}
     m_Modifications:
-    - target: {fileID: 982050908982394386, guid: b5acfde7fea2dce4da1674083c97be9f, type: 3}
-      propertyPath: m_Size.x
-      value: 0.0013746098
+    - target: {fileID: 1224048208, guid: b5acfde7fea2dce4da1674083c97be9f, type: 3}
+      propertyPath: m_Anchor.x
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 982050908982394386, guid: b5acfde7fea2dce4da1674083c97be9f, type: 3}
-      propertyPath: m_Center.x
-      value: -0.01195851
+    - target: {fileID: 1224048208, guid: b5acfde7fea2dce4da1674083c97be9f, type: 3}
+      propertyPath: m_ConnectedBody
+      value: 
+      objectReference: {fileID: 1792273746}
+    - target: {fileID: 1224048208, guid: b5acfde7fea2dce4da1674083c97be9f, type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: -0.023
+      objectReference: {fileID: 0}
+    - target: {fileID: 1224048208, guid: b5acfde7fea2dce4da1674083c97be9f, type: 3}
+      propertyPath: m_LinearLimit.limit
+      value: 0.011
       objectReference: {fileID: 0}
     - target: {fileID: 2961823131951332561, guid: b5acfde7fea2dce4da1674083c97be9f, type: 3}
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2961823131951332561, guid: b5acfde7fea2dce4da1674083c97be9f, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2961823131951332561, guid: b5acfde7fea2dce4da1674083c97be9f, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2961823131951332561, guid: b5acfde7fea2dce4da1674083c97be9f, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2961823131951332561, guid: b5acfde7fea2dce4da1674083c97be9f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.027379353
+      value: -0.0319
       objectReference: {fileID: 0}
     - target: {fileID: 2961823131951332561, guid: b5acfde7fea2dce4da1674083c97be9f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -19268,22 +19163,6 @@ PrefabInstance:
     - target: {fileID: 2961823131951332562, guid: b5acfde7fea2dce4da1674083c97be9f, type: 3}
       propertyPath: m_Name
       value: Button
-      objectReference: {fileID: 0}
-    - target: {fileID: 2961823131951332567, guid: b5acfde7fea2dce4da1674083c97be9f, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: cb9a7bf4fe3c8414e8b1f7f80f4a04c7, type: 2}
-    - target: {fileID: 2961823132904937015, guid: b5acfde7fea2dce4da1674083c97be9f, type: 3}
-      propertyPath: m_Mass
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2961823132904937015, guid: b5acfde7fea2dce4da1674083c97be9f, type: 3}
-      propertyPath: m_Constraints
-      value: 112
-      objectReference: {fileID: 0}
-    - target: {fileID: 2961823132904937015, guid: b5acfde7fea2dce4da1674083c97be9f, type: 3}
-      propertyPath: m_IsKinematic
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b5acfde7fea2dce4da1674083c97be9f, type: 3}

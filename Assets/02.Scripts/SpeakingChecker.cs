@@ -15,6 +15,7 @@ public class SpeakingChecker : MonoBehaviour
 
     }
 
+    // MainCamera 콜라이더와 닿고 있는 동안 이펙터 형성
     void OnTriggerStay(Collider coll)
     {
 

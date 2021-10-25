@@ -34,9 +34,13 @@ public class SoundLampButtonCtrl : MonoBehaviour
         if (!onButton)          // 버튼이 off일 경우 버튼 on
         {
             Debug.Log("버튼온");
-            onButton = true;                        // 버튼 on
-            audio.PlayOneShot(buttonOn, 0.8f);      // 버튼 on Sound 재생
-                                                    //lostStoryRecorder.StartRecord();        // 녹음 시작
+            onButton = true;                                                // 버튼 on
+            audio.PlayOneShot(buttonOn, 0.8f);                              // 버튼 on Sound 재생
+            this.gameObject.GetComponent<BoxCollider>().enabled = false;    // 버튼 콜라이더 잠시 끄기
+
+            // 0.5초 후에 콜라이더 다시 켜기
+            Invoke("TurnOnCollider", 0.5f);
+            //lostStoryRecorder.StartRecord();        // 녹음 시작
         }
         else                    // 버튼이 on일 경우 버튼 off
         {
@@ -45,6 +49,11 @@ public class SoundLampButtonCtrl : MonoBehaviour
             audio.PlayOneShot(buttonOff, 0.8f);     // 버튼 off Sound 재생
                                                     //lostStoryRecorder.StopRecord();         // 녹음 중지
         }
+    }
+
+    void TurnOnCollider()
+    {
+        this.gameObject.GetComponent<BoxCollider>().enabled = true;
     }
 
     // void OnCollisionEnter(Collision coll)

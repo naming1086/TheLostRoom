@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1224048208}
   - component: {fileID: 2372031886669022962}
   - component: {fileID: 1224048210}
+  - component: {fileID: 484892906200526927}
   m_Layer: 0
   m_Name: SoundLampButton
   m_TagString: Untagged
@@ -101,7 +102,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 116
   m_CollisionDetection: 0
 --- !u!65 &982050908982394386
 BoxCollider:
@@ -128,7 +129,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 0
-  m_ConnectedAnchor: {x: -0.023, y: 0.105, z: 0}
+  m_ConnectedAnchor: {x: -0.022, y: 0.104, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 1, y: 0, z: 0}
   m_XMotion: 1
@@ -141,8 +142,8 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LinearLimit:
-    limit: 0.011
-    bounciness: 0
+    limit: 0.01
+    bounciness: 0.5
     contactDistance: 0
   m_AngularXLimitSpring:
     spring: 0
@@ -232,8 +233,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 50
+  MinDistance: 0.02
+  MaxDistance: 3
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -243,23 +244,59 @@ AudioSource:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
+      time: 0.007999999
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: -2.0543168
+      outSlope: -2.0543168
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0.28841907
+    - serializedVersion: 3
+      time: 0.1826565
+      value: 0.6336975
+      inSlope: -1.5213426
+      outSlope: -1.5213426
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.35115504
+      outWeight: 0.29832995
+    - serializedVersion: 3
+      time: 0.37036598
+      value: 0.3736267
+      inSlope: -1.2631029
+      outSlope: -1.2631029
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.30419326
+    - serializedVersion: 3
+      time: 0.5341372
+      value: 0.22149658
+      inSlope: -0.8234114
+      outSlope: -0.8234114
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.3807708
+      outWeight: 0.47867313
+    - serializedVersion: 3
+      time: 0.6785649
+      value: 0.124938965
+      inSlope: -0.46919093
+      outSlope: -0.46919093
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.3612687
+      outWeight: 0.20396507
     - serializedVersion: 3
       time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
+      value: 0.007999999
+      inSlope: -0.3048393
+      outSlope: -0.3048393
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0.22591977
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -321,7 +358,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lostStoryRecorder: {fileID: 0}
+  buttonOn: {fileID: 8300000, guid: 73e971a604dd29a4598c149e28032a28, type: 3}
+  buttonOff: {fileID: 8300000, guid: 59d46e79bebd89047b8e9001322cb09d, type: 3}
+  buttonCollider: {fileID: 0}
   onButton: 0
-  offButton: 0
-  recordButton: {fileID: 0}
-  lampBody: {fileID: 0}
+--- !u!95 &484892906200526927
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2961823131951332562}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b77612bee767201459e8cb3e44539f85, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

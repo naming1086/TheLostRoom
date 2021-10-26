@@ -7,26 +7,36 @@ TagManager:
   - RIGHTINDEX
   - BUTTON
   - GLASS
+  - Flammable
+  - Conductor
+  - Grass
+  - PPaint
+  - Flamer
+  - FlameThrow
+  - NoForcePDM
+  - Butter
+  - Freezable
+  - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Conductor
   - Water
   - UI
   - GLASS
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Tornado
+  - Flamer
+  - Flammable
+  - Grass
+  - Butter
+  - Freezable
+  - PPaint
+  - FlameThrow
+  - VortexSafe
+  - NoForcePDM
+  - PDM_Batch_Pool
+  - PDM_Batch_Pool_Break
   - 
   - 
   - 

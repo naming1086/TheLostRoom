@@ -10,15 +10,18 @@ using UnityEngine.XR;
 using UnityEditor;
 #endif
 
-namespace LiquidVolumeFX {
-    public enum TOPOLOGY {
+namespace LiquidVolumeFX
+{
+    public enum TOPOLOGY
+    {
         Sphere = 0,
         Cylinder = 1,
         Cube = 2,
         Irregular = 10
     }
 
-    public enum DETAIL {
+    public enum DETAIL
+    {
         Simple = 0,
         Default = 10,
         DefaultNoFlask = 11,
@@ -26,19 +29,23 @@ namespace LiquidVolumeFX {
         MultipleNoFlask = 51
     }
 
-    public enum BuoyancyEffect {
+    public enum BuoyancyEffect
+    {
         Simple = 0,
         PositionOnly = 1,
         PositionAndRotation = 2
     }
 
-    public static class DetailExtensions {
+    public static class DetailExtensions
+    {
 
-        public static bool isMultiple(this DETAIL detail) {
+        public static bool isMultiple(this DETAIL detail)
+        {
             return detail == DETAIL.Multiple || detail == DETAIL.MultipleNoFlask;
         }
 
-        public static bool allowsRefraction(this DETAIL detail) {
+        public static bool allowsRefraction(this DETAIL detail)
+        {
             return detail != DETAIL.DefaultNoFlask && detail != DETAIL.MultipleNoFlask;
         }
 
@@ -49,7 +56,8 @@ namespace LiquidVolumeFX {
     [HelpURL("https://kronnect.com/support")]
     [AddComponentMenu("Effects/Liquid Volume")]
     [DisallowMultipleComponent]
-    public partial class LiquidVolume : MonoBehaviour {
+    public partial class LiquidVolume : MonoBehaviour
+    {
 
         public static bool FORCE_GLES_COMPATIBILITY = false;
 
@@ -59,7 +67,8 @@ namespace LiquidVolumeFX {
         public const int MAX_LAYERS = 16;
 
         [Serializable]
-        public struct LiquidLayer {
+        public struct LiquidLayer
+        {
             [HideInInspector] public string layerName;
             public float amount;
             [Tooltip("Density defines the order in which layers stack up. Two or more liquids with same density and miscible set to true will mix.")]
@@ -105,7 +114,8 @@ namespace LiquidVolumeFX {
             [HideInInspector]
             public float currentBubblesOpacity;
 
-            public void SetDefaults() {
+            public void SetDefaults()
+            {
                 amount = 0.1f;
                 density = 1f;
                 color = new Color(Random.value, Random.value, Random.value, 0.5f);
@@ -117,7 +127,8 @@ namespace LiquidVolumeFX {
                 bubblesOpacity = 1f;
             }
 
-            public void ResetCurrentStates() {
+            public void ResetCurrentStates()
+            {
                 currentColor = color;
                 currentColor2 = murkColor;
                 currentMurkiness = murkiness;
@@ -132,10 +143,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         TOPOLOGY _topology = TOPOLOGY.Sphere;
 
-        public TOPOLOGY topology {
+        public TOPOLOGY topology
+        {
             get { return _topology; }
-            set {
-                if (_topology != value) {
+            set
+            {
+                if (_topology != value)
+                {
                     _topology = value;
                     UpdateMaterialProperties();
                 }
@@ -145,10 +159,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         DETAIL _detail = DETAIL.Default;
 
-        public DETAIL detail {
+        public DETAIL detail
+        {
             get { return _detail; }
-            set {
-                if (_detail != value) {
+            set
+            {
+                if (_detail != value)
+                {
                     _detail = value;
                     UpdateMaterialProperties();
                 }
@@ -159,10 +176,13 @@ namespace LiquidVolumeFX {
         [Range(0, 1)]
         float _level = 0.5f;
 
-        public float level {
+        public float level
+        {
             get { return _level; }
-            set {
-                if (_level != value) {
+            set
+            {
+                if (_level != value)
+                {
                     _level = value;
                     UpdateMaterialProperties();
                 }
@@ -174,10 +194,13 @@ namespace LiquidVolumeFX {
         [Range(0, 1)]
         float _levelMultiplier = 1f;
 
-        public float levelMultiplier {
+        public float levelMultiplier
+        {
             get { return _levelMultiplier; }
-            set {
-                if (_levelMultiplier != value) {
+            set
+            {
+                if (_levelMultiplier != value)
+                {
                     _levelMultiplier = value;
                     UpdateMaterialProperties();
                 }
@@ -188,10 +211,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         LiquidLayer[] _liquidLayers;
 
-        public LiquidLayer[] liquidLayers {
+        public LiquidLayer[] liquidLayers
+        {
             get { return _liquidLayers; }
-            set {
-                if (_liquidLayers != value) {
+            set
+            {
+                if (_liquidLayers != value)
+                {
                     _liquidLayers = value;
                     lastLayerCount = 0;
                     UpdateMaterialProperties();
@@ -204,10 +230,13 @@ namespace LiquidVolumeFX {
         [Range(0, 16)]
         int _smoothContactSurface = 3;
 
-        public int smoothContactSurface {
+        public int smoothContactSurface
+        {
             get { return _smoothContactSurface; }
-            set {
-                if (_smoothContactSurface != value) {
+            set
+            {
+                if (_smoothContactSurface != value)
+                {
                     _smoothContactSurface = value;
                     requireLayersUpdate = true;
                     UpdateMaterialProperties();
@@ -220,10 +249,13 @@ namespace LiquidVolumeFX {
         [Range(0, 1)]
         float _ditherStrength = 0.5f;
 
-        public float ditherStrength {
+        public float ditherStrength
+        {
             get { return _ditherStrength; }
-            set {
-                if (_ditherStrength != value) {
+            set
+            {
+                if (_ditherStrength != value)
+                {
                     _ditherStrength = value;
                     UpdateMaterialProperties();
                 }
@@ -234,10 +266,13 @@ namespace LiquidVolumeFX {
         [Range(0.001f, 10)]
         float _layersAdjustmentSpeed = 1f;
 
-        public float layersAdjustmentSpeed {
+        public float layersAdjustmentSpeed
+        {
             get { return _layersAdjustmentSpeed; }
-            set {
-                if (_layersAdjustmentSpeed != value) {
+            set
+            {
+                if (_layersAdjustmentSpeed != value)
+                {
                     _layersAdjustmentSpeed = value;
                     UpdateMaterialProperties();
                 }
@@ -248,10 +283,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         bool _layersAdjustmentCompact = true;
 
-        public bool layersAdjustmentCompact {
+        public bool layersAdjustmentCompact
+        {
             get { return _layersAdjustmentCompact; }
-            set {
-                if (_layersAdjustmentCompact != value) {
+            set
+            {
+                if (_layersAdjustmentCompact != value)
+                {
                     _layersAdjustmentCompact = value;
                     UpdateMaterialProperties();
                 }
@@ -263,10 +301,13 @@ namespace LiquidVolumeFX {
         [ColorUsage(true)]
         Color _liquidColor1 = new Color(0, 1, 0, 0.1f);
 
-        public Color liquidColor1 {
+        public Color liquidColor1
+        {
             get { return _liquidColor1; }
-            set {
-                if (_liquidColor1 != value) {
+            set
+            {
+                if (_liquidColor1 != value)
+                {
                     _liquidColor1 = value;
                     UpdateMaterialProperties();
                 }
@@ -277,10 +318,13 @@ namespace LiquidVolumeFX {
         [Range(0.1f, 4.85f)]
         float _liquidScale1 = 1f;
 
-        public float liquidScale1 {
+        public float liquidScale1
+        {
             get { return _liquidScale1; }
-            set {
-                if (_liquidScale1 != value) {
+            set
+            {
+                if (_liquidScale1 != value)
+                {
                     _liquidScale1 = value;
                     UpdateMaterialProperties();
                 }
@@ -291,10 +335,13 @@ namespace LiquidVolumeFX {
         [ColorUsage(true)]
         Color _liquidColor2 = new Color(1, 0, 0, 0.3f);
 
-        public Color liquidColor2 {
+        public Color liquidColor2
+        {
             get { return _liquidColor2; }
-            set {
-                if (_liquidColor2 != value) {
+            set
+            {
+                if (_liquidColor2 != value)
+                {
                     _liquidColor2 = value;
                     UpdateMaterialProperties();
                 }
@@ -305,10 +352,13 @@ namespace LiquidVolumeFX {
         [Range(2f, 4.85f)]
         float _liquidScale2 = 5f;
 
-        public float liquidScale2 {
+        public float liquidScale2
+        {
             get { return _liquidScale2; }
-            set {
-                if (_liquidScale2 != value) {
+            set
+            {
+                if (_liquidScale2 != value)
+                {
                     _liquidScale2 = value;
                     UpdateMaterialProperties();
                 }
@@ -319,10 +369,13 @@ namespace LiquidVolumeFX {
         [Range(0, 1)]
         float _alpha = 1f;
 
-        public float alpha {
+        public float alpha
+        {
             get { return _alpha; }
-            set {
-                if (_alpha != Mathf.Clamp01(value)) {
+            set
+            {
+                if (_alpha != Mathf.Clamp01(value))
+                {
                     _alpha = Mathf.Clamp01(value);
                     UpdateMaterialProperties();
                 }
@@ -333,10 +386,13 @@ namespace LiquidVolumeFX {
         [ColorUsage(true)]
         Color _emissionColor = new Color(0, 0, 0);
 
-        public Color emissionColor {
+        public Color emissionColor
+        {
             get { return _emissionColor; }
-            set {
-                if (_emissionColor != value) {
+            set
+            {
+                if (_emissionColor != value)
+                {
                     _emissionColor = value;
                     UpdateMaterialProperties();
                 }
@@ -345,10 +401,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         bool _ditherShadows = true;
 
-        public bool ditherShadows {
+        public bool ditherShadows
+        {
             get { return _ditherShadows; }
-            set {
-                if (_ditherShadows != value) {
+            set
+            {
+                if (_ditherShadows != value)
+                {
                     _ditherShadows = value;
                     UpdateMaterialProperties();
                 }
@@ -359,10 +418,13 @@ namespace LiquidVolumeFX {
         [Range(0, 1)]
         float _murkiness = 1.0f;
 
-        public float murkiness {
+        public float murkiness
+        {
             get { return _murkiness; }
-            set {
-                if (_murkiness != value) {
+            set
+            {
+                if (_murkiness != value)
+                {
                     _murkiness = value;
                     UpdateMaterialProperties();
                 }
@@ -373,10 +435,13 @@ namespace LiquidVolumeFX {
         [Range(0, 1f)]
         float _turbulence1 = 0.5f;
 
-        public float turbulence1 {
+        public float turbulence1
+        {
             get { return _turbulence1; }
-            set {
-                if (_turbulence1 != value) {
+            set
+            {
+                if (_turbulence1 != value)
+                {
                     _turbulence1 = value;
                     UpdateMaterialProperties();
                 }
@@ -387,10 +452,13 @@ namespace LiquidVolumeFX {
         [Range(0, 1f)]
         float _turbulence2 = 0.2f;
 
-        public float turbulence2 {
+        public float turbulence2
+        {
             get { return _turbulence2; }
-            set {
-                if (_turbulence2 != value) {
+            set
+            {
+                if (_turbulence2 != value)
+                {
                     _turbulence2 = value;
                     UpdateMaterialProperties();
                 }
@@ -400,10 +468,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         float _frecuency = 1f;
 
-        public float frecuency {
+        public float frecuency
+        {
             get { return _frecuency; }
-            set {
-                if (_frecuency != value) {
+            set
+            {
+                if (_frecuency != value)
+                {
                     _frecuency = value;
                     UpdateMaterialProperties();
                 }
@@ -414,10 +485,13 @@ namespace LiquidVolumeFX {
         [Range(0f, 2f)]
         float _speed = 1f;
 
-        public float speed {
+        public float speed
+        {
             get { return _speed; }
-            set {
-                if (_speed != value) {
+            set
+            {
+                if (_speed != value)
+                {
                     _speed = value;
                     UpdateMaterialProperties();
                 }
@@ -428,10 +502,13 @@ namespace LiquidVolumeFX {
         [Range(0, 5f)]
         float _sparklingIntensity = 0.1f;
 
-        public float sparklingIntensity {
+        public float sparklingIntensity
+        {
             get { return _sparklingIntensity; }
-            set {
-                if (_sparklingIntensity != value) {
+            set
+            {
+                if (_sparklingIntensity != value)
+                {
                     _sparklingIntensity = value;
                     UpdateMaterialProperties();
                 }
@@ -442,10 +519,13 @@ namespace LiquidVolumeFX {
         [Range(0, 1)]
         float _sparklingAmount = 0.2f;
 
-        public float sparklingAmount {
+        public float sparklingAmount
+        {
             get { return _sparklingAmount; }
-            set {
-                if (_sparklingAmount != value) {
+            set
+            {
+                if (_sparklingAmount != value)
+                {
                     _sparklingAmount = value;
                     UpdateMaterialProperties();
                 }
@@ -456,10 +536,13 @@ namespace LiquidVolumeFX {
         [Range(0, 10)]
         float _deepObscurance = 2.0f;
 
-        public float deepObscurance {
+        public float deepObscurance
+        {
             get { return _deepObscurance; }
-            set {
-                if (_deepObscurance != value) {
+            set
+            {
+                if (_deepObscurance != value)
+                {
                     _deepObscurance = value;
                     UpdateMaterialProperties();
                 }
@@ -470,10 +553,13 @@ namespace LiquidVolumeFX {
         [ColorUsage(true)]
         Color _foamColor = new Color(1, 1, 1, 0.65f);
 
-        public Color foamColor {
+        public Color foamColor
+        {
             get { return _foamColor; }
-            set {
-                if (_foamColor != value) {
+            set
+            {
+                if (_foamColor != value)
+                {
                     _foamColor = value;
                     UpdateMaterialProperties();
                 }
@@ -484,10 +570,13 @@ namespace LiquidVolumeFX {
         [Range(0.01f, 1f)]
         float _foamScale = 0.2f;
 
-        public float foamScale {
+        public float foamScale
+        {
             get { return _foamScale; }
-            set {
-                if (_foamScale != value) {
+            set
+            {
+                if (_foamScale != value)
+                {
                     _foamScale = value;
                     UpdateMaterialProperties();
                 }
@@ -498,10 +587,13 @@ namespace LiquidVolumeFX {
         [Range(0, 0.1f)]
         float _foamThickness = 0.04f;
 
-        public float foamThickness {
+        public float foamThickness
+        {
             get { return _foamThickness; }
-            set {
-                if (_foamThickness != value) {
+            set
+            {
+                if (_foamThickness != value)
+                {
                     _foamThickness = value;
                     UpdateMaterialProperties();
                 }
@@ -512,10 +604,13 @@ namespace LiquidVolumeFX {
         [Range(-1, 1)]
         float _foamDensity = 0.5f;
 
-        public float foamDensity {
+        public float foamDensity
+        {
             get { return _foamDensity; }
-            set {
-                if (_foamDensity != value) {
+            set
+            {
+                if (_foamDensity != value)
+                {
                     _foamDensity = value;
                     UpdateMaterialProperties();
                 }
@@ -526,10 +621,13 @@ namespace LiquidVolumeFX {
         [Range(4, 100)]
         float _foamWeight = 10f;
 
-        public float foamWeight {
+        public float foamWeight
+        {
             get { return _foamWeight; }
-            set {
-                if (_foamWeight != value) {
+            set
+            {
+                if (_foamWeight != value)
+                {
                     _foamWeight = value;
                     UpdateMaterialProperties();
                 }
@@ -540,10 +638,13 @@ namespace LiquidVolumeFX {
         [Range(0, 1)]
         float _foamTurbulence = 1f;
 
-        public float foamTurbulence {
+        public float foamTurbulence
+        {
             get { return _foamTurbulence; }
-            set {
-                if (_foamTurbulence != value) {
+            set
+            {
+                if (_foamTurbulence != value)
+                {
                     _foamTurbulence = value;
                     UpdateMaterialProperties();
                 }
@@ -553,10 +654,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         bool _foamVisibleFromBottom = true;
 
-        public bool foamVisibleFromBottom {
+        public bool foamVisibleFromBottom
+        {
             get { return _foamVisibleFromBottom; }
-            set {
-                if (_foamVisibleFromBottom != value) {
+            set
+            {
+                if (_foamVisibleFromBottom != value)
+                {
                     _foamVisibleFromBottom = value;
                     UpdateMaterialProperties();
                 }
@@ -566,10 +670,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         bool _smokeEnabled = true;
 
-        public bool smokeEnabled {
+        public bool smokeEnabled
+        {
             get { return _smokeEnabled; }
-            set {
-                if (_smokeEnabled != value) {
+            set
+            {
+                if (_smokeEnabled != value)
+                {
                     _smokeEnabled = value;
                     UpdateMaterialProperties();
                 }
@@ -581,10 +688,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         Color _smokeColor = new Color(0.7f, 0.7f, 0.7f, 0.25f);
 
-        public Color smokeColor {
+        public Color smokeColor
+        {
             get { return _smokeColor; }
-            set {
-                if (_smokeColor != value) {
+            set
+            {
+                if (_smokeColor != value)
+                {
                     _smokeColor = value;
                     UpdateMaterialProperties();
                 }
@@ -595,10 +705,13 @@ namespace LiquidVolumeFX {
         [Range(0.01f, 1f)]
         float _smokeScale = 0.25f;
 
-        public float smokeScale {
+        public float smokeScale
+        {
             get { return _smokeScale; }
-            set {
-                if (_smokeScale != value) {
+            set
+            {
+                if (_smokeScale != value)
+                {
                     _smokeScale = value;
                     UpdateMaterialProperties();
                 }
@@ -609,10 +722,13 @@ namespace LiquidVolumeFX {
         [Range(0, 10f)]
         float _smokeBaseObscurance = 2.0f;
 
-        public float smokeBaseObscurance {
+        public float smokeBaseObscurance
+        {
             get { return _smokeBaseObscurance; }
-            set {
-                if (_smokeBaseObscurance != value) {
+            set
+            {
+                if (_smokeBaseObscurance != value)
+                {
                     _smokeBaseObscurance = value;
                     UpdateMaterialProperties();
                 }
@@ -624,10 +740,13 @@ namespace LiquidVolumeFX {
         [Range(0, 10f)]
         float _smokeHeightAtten;
 
-        public float smokeHeightAtten {
+        public float smokeHeightAtten
+        {
             get { return _smokeHeightAtten; }
-            set {
-                if (_smokeHeightAtten != value) {
+            set
+            {
+                if (_smokeHeightAtten != value)
+                {
                     _smokeHeightAtten = value;
                     UpdateMaterialProperties();
                 }
@@ -639,10 +758,13 @@ namespace LiquidVolumeFX {
         [Range(0, 20f)]
         float _smokeSpeed = 5.0f;
 
-        public float smokeSpeed {
+        public float smokeSpeed
+        {
             get { return _smokeSpeed; }
-            set {
-                if (_smokeSpeed != value) {
+            set
+            {
+                if (_smokeSpeed != value)
+                {
                     _smokeSpeed = value;
                     UpdateMaterialProperties();
                 }
@@ -652,10 +774,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         bool _fixMesh;
 
-        public bool fixMesh {
+        public bool fixMesh
+        {
             get { return _fixMesh; }
-            set {
-                if (_fixMesh != value) {
+            set
+            {
+                if (_fixMesh != value)
+                {
                     _fixMesh = value;
                     UpdateMaterialProperties();
                 }
@@ -668,10 +793,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         Vector3 _pivotOffset;
 
-        public Vector3 pivotOffset {
+        public Vector3 pivotOffset
+        {
             get { return _pivotOffset; }
-            set {
-                if (_pivotOffset != value) {
+            set
+            {
+                if (_pivotOffset != value)
+                {
                     _pivotOffset = value;
                     UpdateMaterialProperties();
                 }
@@ -682,10 +810,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         bool _autoCloseMesh;
 
-        public bool autoCloseMesh {
+        public bool autoCloseMesh
+        {
             get { return _autoCloseMesh; }
-            set {
-                if (_autoCloseMesh != value) {
+            set
+            {
+                if (_autoCloseMesh != value)
+                {
                     _autoCloseMesh = value;
                     UpdateMaterialProperties();
                 }
@@ -697,10 +828,13 @@ namespace LiquidVolumeFX {
         [Range(0, 1.5f)]
         float _upperLimit = 1.5f;
 
-        public float upperLimit {
+        public float upperLimit
+        {
             get { return _upperLimit; }
-            set {
-                if (_upperLimit != value) {
+            set
+            {
+                if (_upperLimit != value)
+                {
                     _upperLimit = value;
                     UpdateMaterialProperties();
                 }
@@ -711,10 +845,13 @@ namespace LiquidVolumeFX {
         [Range(-1.5f, 1.5f)]
         float _lowerLimit = -1.5f;
 
-        public float lowerLimit {
+        public float lowerLimit
+        {
             get { return _lowerLimit; }
-            set {
-                if (_lowerLimit != value) {
+            set
+            {
+                if (_lowerLimit != value)
+                {
                     _lowerLimit = value;
                     UpdateMaterialProperties();
                 }
@@ -724,10 +861,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         int _subMeshIndex = -1;
 
-        public int subMeshIndex {
+        public int subMeshIndex
+        {
             get { return _subMeshIndex; }
-            set {
-                if (_subMeshIndex != value) {
+            set
+            {
+                if (_subMeshIndex != value)
+                {
                     _subMeshIndex = value;
                     UpdateMaterialProperties();
                 }
@@ -738,10 +878,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         Material _flaskMaterial;
 
-        public Material flaskMaterial {
+        public Material flaskMaterial
+        {
             get { return _flaskMaterial; }
-            set {
-                if (_flaskMaterial != value) {
+            set
+            {
+                if (_flaskMaterial != value)
+                {
                     _flaskMaterial = value;
                     UpdateMaterialProperties();
                 }
@@ -752,10 +895,13 @@ namespace LiquidVolumeFX {
         [Range(0, 1)]
         float _flaskThickness = 0.03f;
 
-        public float flaskThickness {
+        public float flaskThickness
+        {
             get { return _flaskThickness; }
-            set {
-                if (_flaskThickness != value) {
+            set
+            {
+                if (_flaskThickness != value)
+                {
                     _flaskThickness = value;
                     UpdateMaterialProperties();
                 }
@@ -766,10 +912,13 @@ namespace LiquidVolumeFX {
         [Range(0, 1)]
         float _glossinessInternal = 0.3f;
 
-        public float glossinessInternal {
+        public float glossinessInternal
+        {
             get { return _glossinessInternal; }
-            set {
-                if (_glossinessInternal != value) {
+            set
+            {
+                if (_glossinessInternal != value)
+                {
                     _glossinessInternal = value;
                     UpdateMaterialProperties();
                 }
@@ -779,10 +928,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         bool _scatteringEnabled = false;
 
-        public bool scatteringEnabled {
+        public bool scatteringEnabled
+        {
             get { return _scatteringEnabled; }
-            set {
-                if (_scatteringEnabled != value) {
+            set
+            {
+                if (_scatteringEnabled != value)
+                {
                     _scatteringEnabled = value;
                     UpdateMaterialProperties();
                 }
@@ -793,10 +945,13 @@ namespace LiquidVolumeFX {
         [Range(1, 16)]
         int _scatteringPower = 5;
 
-        public int scatteringPower {
+        public int scatteringPower
+        {
             get { return _scatteringPower; }
-            set {
-                if (_scatteringPower != value) {
+            set
+            {
+                if (_scatteringPower != value)
+                {
                     _scatteringPower = value;
                     UpdateMaterialProperties();
                 }
@@ -807,10 +962,13 @@ namespace LiquidVolumeFX {
         [Range(0, 10)]
         float _scatteringAmount = 0.3f;
 
-        public float scatteringAmount {
+        public float scatteringAmount
+        {
             get { return _scatteringAmount; }
-            set {
-                if (_scatteringAmount != value) {
+            set
+            {
+                if (_scatteringAmount != value)
+                {
                     _scatteringAmount = value;
                     UpdateMaterialProperties();
                 }
@@ -820,10 +978,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         bool _refractionBlur = true;
 
-        public bool refractionBlur {
+        public bool refractionBlur
+        {
             get { return _refractionBlur; }
-            set {
-                if (_refractionBlur != value) {
+            set
+            {
+                if (_refractionBlur != value)
+                {
                     _refractionBlur = value;
                     UpdateMaterialProperties();
                 }
@@ -834,10 +995,13 @@ namespace LiquidVolumeFX {
         [Range(0, 1)]
         float _blurIntensity = 0.75f;
 
-        public float blurIntensity {
+        public float blurIntensity
+        {
             get { return _blurIntensity; }
-            set {
-                if (_blurIntensity != Mathf.Clamp01(value)) {
+            set
+            {
+                if (_blurIntensity != Mathf.Clamp01(value))
+                {
                     _blurIntensity = Mathf.Clamp01(value);
                     UpdateMaterialProperties();
                 }
@@ -847,10 +1011,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         int _liquidRaySteps = 10;
 
-        public int liquidRaySteps {
+        public int liquidRaySteps
+        {
             get { return _liquidRaySteps; }
-            set {
-                if (_liquidRaySteps != value) {
+            set
+            {
+                if (_liquidRaySteps != value)
+                {
                     _liquidRaySteps = value;
                     UpdateMaterialProperties();
                 }
@@ -860,10 +1027,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         int _foamRaySteps = 7;
 
-        public int foamRaySteps {
+        public int foamRaySteps
+        {
             get { return _foamRaySteps; }
-            set {
-                if (_foamRaySteps != value) {
+            set
+            {
+                if (_foamRaySteps != value)
+                {
                     _foamRaySteps = value;
                     UpdateMaterialProperties();
                 }
@@ -873,10 +1043,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         int _smokeRaySteps = 5;
 
-        public int smokeRaySteps {
+        public int smokeRaySteps
+        {
             get { return _smokeRaySteps; }
-            set {
-                if (_smokeRaySteps != value) {
+            set
+            {
+                if (_smokeRaySteps != value)
+                {
                     _smokeRaySteps = value;
                     UpdateMaterialProperties();
                 }
@@ -886,10 +1059,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         Texture2D _bumpMap;
 
-        public Texture2D bumpMap {
+        public Texture2D bumpMap
+        {
             get { return _bumpMap; }
-            set {
-                if (_bumpMap != value) {
+            set
+            {
+                if (_bumpMap != value)
+                {
                     _bumpMap = value;
                     UpdateMaterialProperties();
                 }
@@ -900,10 +1076,13 @@ namespace LiquidVolumeFX {
         [Range(0, 1f)]
         float _bumpStrength = 1f;
 
-        public float bumpStrength {
+        public float bumpStrength
+        {
             get { return _bumpStrength; }
-            set {
-                if (_bumpStrength != value) {
+            set
+            {
+                if (_bumpStrength != value)
+                {
                     _bumpStrength = value;
                     UpdateMaterialProperties();
                 }
@@ -914,10 +1093,13 @@ namespace LiquidVolumeFX {
         [Range(0, 10f)]
         float _bumpDistortionScale = 1f;
 
-        public float bumpDistortionScale {
+        public float bumpDistortionScale
+        {
             get { return _bumpDistortionScale; }
-            set {
-                if (_bumpDistortionScale != value) {
+            set
+            {
+                if (_bumpDistortionScale != value)
+                {
                     _bumpDistortionScale = value;
                     UpdateMaterialProperties();
                 }
@@ -927,10 +1109,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         Vector2 _bumpDistortionOffset;
 
-        public Vector2 bumpDistortionOffset {
+        public Vector2 bumpDistortionOffset
+        {
             get { return _bumpDistortionOffset; }
-            set {
-                if (_bumpDistortionOffset != value) {
+            set
+            {
+                if (_bumpDistortionOffset != value)
+                {
                     _bumpDistortionOffset = value;
                     UpdateMaterialProperties();
                 }
@@ -940,10 +1125,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         Texture2D _distortionMap;
 
-        public Texture2D distortionMap {
+        public Texture2D distortionMap
+        {
             get { return _distortionMap; }
-            set {
-                if (_distortionMap != value) {
+            set
+            {
+                if (_distortionMap != value)
+                {
                     _distortionMap = value;
                     UpdateMaterialProperties();
                 }
@@ -954,10 +1142,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         Texture2D _texture;
 
-        public Texture2D texture {
+        public Texture2D texture
+        {
             get { return _texture; }
-            set {
-                if (_texture != value) {
+            set
+            {
+                if (_texture != value)
+                {
                     _texture = value;
                     UpdateMaterialProperties();
                 }
@@ -968,10 +1159,13 @@ namespace LiquidVolumeFX {
         Vector2
             _textureScale = Vector2.one;
 
-        public Vector2 textureScale {
+        public Vector2 textureScale
+        {
             get { return _textureScale; }
-            set {
-                if (_textureScale != value) {
+            set
+            {
+                if (_textureScale != value)
+                {
                     _textureScale = value;
                     UpdateMaterialProperties();
                 }
@@ -982,10 +1176,13 @@ namespace LiquidVolumeFX {
         Vector2
             _textureOffset;
 
-        public Vector2 textureOffset {
+        public Vector2 textureOffset
+        {
             get { return _textureOffset; }
-            set {
-                if (_textureOffset != value) {
+            set
+            {
+                if (_textureOffset != value)
+                {
                     _textureOffset = value;
                     UpdateMaterialProperties();
                 }
@@ -997,10 +1194,13 @@ namespace LiquidVolumeFX {
         float
             _distortionAmount = 1f;
 
-        public float distortionAmount {
+        public float distortionAmount
+        {
             get { return _distortionAmount; }
-            set {
-                if (_distortionAmount != value) {
+            set
+            {
+                if (_distortionAmount != value)
+                {
                     _distortionAmount = value;
                     UpdateMaterialProperties();
                 }
@@ -1010,10 +1210,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         bool _depthAware;
 
-        public bool depthAware {
+        public bool depthAware
+        {
             get { return _depthAware; }
-            set {
-                if (_depthAware != value) {
+            set
+            {
+                if (_depthAware != value)
+                {
                     _depthAware = value;
                     UpdateMaterialProperties();
                 }
@@ -1023,10 +1226,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         float _depthAwareOffset;
 
-        public float depthAwareOffset {
+        public float depthAwareOffset
+        {
             get { return _depthAwareOffset; }
-            set {
-                if (_depthAwareOffset != value) {
+            set
+            {
+                if (_depthAwareOffset != value)
+                {
                     _depthAwareOffset = value;
                     UpdateMaterialProperties();
                 }
@@ -1036,10 +1242,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         bool _irregularDepthDebug = false;
 
-        public bool irregularDepthDebug {
+        public bool irregularDepthDebug
+        {
             get { return _irregularDepthDebug; }
-            set {
-                if (_irregularDepthDebug != value) {
+            set
+            {
+                if (_irregularDepthDebug != value)
+                {
                     _irregularDepthDebug = value;
                     UpdateMaterialProperties();
                 }
@@ -1051,10 +1260,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         bool _depthAwareCustomPass;
 
-        public bool depthAwareCustomPass {
+        public bool depthAwareCustomPass
+        {
             get { return _depthAwareCustomPass; }
-            set {
-                if (_depthAwareCustomPass != value) {
+            set
+            {
+                if (_depthAwareCustomPass != value)
+                {
                     _depthAwareCustomPass = value;
                     UpdateMaterialProperties();
                 }
@@ -1065,10 +1277,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         bool _depthAwareCustomPassDebug = false;
 
-        public bool depthAwareCustomPassDebug {
+        public bool depthAwareCustomPassDebug
+        {
             get { return _depthAwareCustomPassDebug; }
-            set {
-                if (_depthAwareCustomPassDebug != value) {
+            set
+            {
+                if (_depthAwareCustomPassDebug != value)
+                {
                     _depthAwareCustomPassDebug = value;
                     UpdateMaterialProperties();
                 }
@@ -1080,10 +1295,13 @@ namespace LiquidVolumeFX {
         [Range(0, 5f)]
         float _doubleSidedBias = 0.001f;
 
-        public float doubleSidedBias {
+        public float doubleSidedBias
+        {
             get { return _doubleSidedBias; }
-            set {
-                if (_doubleSidedBias != value) {
+            set
+            {
+                if (_doubleSidedBias != value)
+                {
                     _doubleSidedBias = value;
                     UpdateMaterialProperties();
                 }
@@ -1093,11 +1311,14 @@ namespace LiquidVolumeFX {
         [SerializeField]
         float _backDepthBias;
 
-        public float backDepthBias {
+        public float backDepthBias
+        {
             get { return _backDepthBias; }
-            set {
+            set
+            {
                 if (value < 0) value = 0;
-                if (_backDepthBias != value) {
+                if (_backDepthBias != value)
+                {
                     _backDepthBias = value;
                     UpdateMaterialProperties();
                 }
@@ -1109,10 +1330,13 @@ namespace LiquidVolumeFX {
         [Range(0, 1f)]
         float _rotationLevelBias;
 
-        public float rotationLevelBias {
+        public float rotationLevelBias
+        {
             get { return _rotationLevelBias; }
-            set {
-                if (_rotationLevelBias != value) {
+            set
+            {
+                if (_rotationLevelBias != value)
+                {
                     _rotationLevelBias = value;
                     UpdateMaterialProperties();
                 }
@@ -1123,10 +1347,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         bool _ignoreGravity;
 
-        public bool ignoreGravity {
+        public bool ignoreGravity
+        {
             get { return _ignoreGravity; }
-            set {
-                if (_ignoreGravity != value) {
+            set
+            {
+                if (_ignoreGravity != value)
+                {
                     _ignoreGravity = value;
                     UpdateMaterialProperties();
                 }
@@ -1137,10 +1364,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         bool _reactToForces;
 
-        public bool reactToForces {
+        public bool reactToForces
+        {
             get { return _reactToForces; }
-            set {
-                if (_reactToForces != value) {
+            set
+            {
+                if (_reactToForces != value)
+                {
                     _reactToForces = value;
                     UpdateMaterialProperties();
                 }
@@ -1150,10 +1380,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         Vector3 _extentsScale = Vector3.one;
 
-        public Vector3 extentsScale {
+        public Vector3 extentsScale
+        {
             get { return _extentsScale; }
-            set {
-                if (_extentsScale != value) {
+            set
+            {
+                if (_extentsScale != value)
+                {
                     _extentsScale = value;
                     UpdateMaterialProperties();
                 }
@@ -1164,10 +1397,13 @@ namespace LiquidVolumeFX {
         [Range(1, 3)]
         int _noiseVariation = 1;
 
-        public int noiseVariation {
+        public int noiseVariation
+        {
             get { return _noiseVariation; }
-            set {
-                if (_noiseVariation != value) {
+            set
+            {
+                if (_noiseVariation != value)
+                {
                     _noiseVariation = value;
                     UpdateMaterialProperties();
                 }
@@ -1177,10 +1413,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         bool _allowViewFromInside = false;
 
-        public bool allowViewFromInside {
+        public bool allowViewFromInside
+        {
             get { return _allowViewFromInside; }
-            set {
-                if (_allowViewFromInside != value) {
+            set
+            {
+                if (_allowViewFromInside != value)
+                {
                     _allowViewFromInside = value;
                     lastDistanceToCam = -1;
                     CheckInsideOut();
@@ -1193,10 +1432,13 @@ namespace LiquidVolumeFX {
         bool
             _debugSpillPoint = false;
 
-        public bool debugSpillPoint {
+        public bool debugSpillPoint
+        {
             get { return _debugSpillPoint; }
-            set {
-                if (_debugSpillPoint != value) {
+            set
+            {
+                if (_debugSpillPoint != value)
+                {
                     _debugSpillPoint = value;
                 }
             }
@@ -1206,10 +1448,13 @@ namespace LiquidVolumeFX {
         int
             _renderQueue = 3001;
 
-        public int renderQueue {
+        public int renderQueue
+        {
             get { return _renderQueue; }
-            set {
-                if (_renderQueue != value) {
+            set
+            {
+                if (_renderQueue != value)
+                {
                     _renderQueue = value;
                     UpdateMaterialProperties();
                 }
@@ -1220,10 +1465,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         Cubemap _reflectionTexture;
 
-        public Cubemap reflectionTexture {
+        public Cubemap reflectionTexture
+        {
             get { return _reflectionTexture; }
-            set {
-                if (_reflectionTexture != value) {
+            set
+            {
+                if (_reflectionTexture != value)
+                {
                     _reflectionTexture = value;
                     UpdateMaterialProperties();
                 }
@@ -1234,10 +1482,13 @@ namespace LiquidVolumeFX {
         [Range(0.1f, 5f)]
         float _physicsMass = 1f;
 
-        public float physicsMass {
+        public float physicsMass
+        {
             get { return _physicsMass; }
-            set {
-                if (_physicsMass != value) {
+            set
+            {
+                if (_physicsMass != value)
+                {
                     _physicsMass = value;
                     UpdateMaterialProperties();
                 }
@@ -1248,10 +1499,13 @@ namespace LiquidVolumeFX {
         [Range(0.0f, 0.2f)]
         float _physicsAngularDamp = 0.02f;
 
-        public float physicsAngularDamp {
+        public float physicsAngularDamp
+        {
             get { return _physicsAngularDamp; }
-            set {
-                if (_physicsAngularDamp != value) {
+            set
+            {
+                if (_physicsAngularDamp != value)
+                {
                     _physicsAngularDamp = value;
                     UpdateMaterialProperties();
                 }
@@ -1263,10 +1517,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         int _bubblesAmount = 32;
 
-        public int bubblesAmount {
+        public int bubblesAmount
+        {
             get { return _bubblesAmount; }
-            set {
-                if (_bubblesAmount != value) {
+            set
+            {
+                if (_bubblesAmount != value)
+                {
                     _bubblesAmount = value;
                     requireBubblesUpdate = true;
                     UpdateMaterialProperties();
@@ -1277,10 +1534,13 @@ namespace LiquidVolumeFX {
         [SerializeField, Range(1, 16)]
         int _bubblesSizeMin = 2;
 
-        public int bubblesSizeMin {
+        public int bubblesSizeMin
+        {
             get { return _bubblesSizeMin; }
-            set {
-                if (_bubblesSizeMin != value) {
+            set
+            {
+                if (_bubblesSizeMin != value)
+                {
                     _bubblesSizeMin = value;
                     requireBubblesUpdate = true;
                     UpdateMaterialProperties();
@@ -1291,10 +1551,13 @@ namespace LiquidVolumeFX {
         [SerializeField, Range(1, 16)]
         int _bubblesSizeMax = 4;
 
-        public int bubblesSizeMax {
+        public int bubblesSizeMax
+        {
             get { return _bubblesSizeMax; }
-            set {
-                if (_bubblesSizeMax != value) {
+            set
+            {
+                if (_bubblesSizeMax != value)
+                {
                     _bubblesSizeMax = value;
                     requireBubblesUpdate = true;
                     UpdateMaterialProperties();
@@ -1305,10 +1568,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         float _bubblesScale = 3f;
 
-        public float bubblesScale {
+        public float bubblesScale
+        {
             get { return _bubblesScale; }
-            set {
-                if (_bubblesScale != value) {
+            set
+            {
+                if (_bubblesScale != value)
+                {
                     _bubblesScale = value;
                     UpdateMaterialProperties();
                 }
@@ -1319,10 +1585,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         float _bubblesBrightness = 1;
 
-        public float bubblesBrightness {
+        public float bubblesBrightness
+        {
             get { return _bubblesBrightness; }
-            set {
-                if (_bubblesBrightness != value) {
+            set
+            {
+                if (_bubblesBrightness != value)
+                {
                     _bubblesBrightness = value;
                     UpdateMaterialProperties();
                 }
@@ -1333,10 +1602,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         float _bubblesVerticalSpeed = 1;
 
-        public float bubblesVerticalSpeed {
+        public float bubblesVerticalSpeed
+        {
             get { return _bubblesVerticalSpeed; }
-            set {
-                if (_bubblesVerticalSpeed != value) {
+            set
+            {
+                if (_bubblesVerticalSpeed != value)
+                {
                     _bubblesVerticalSpeed = value;
                     UpdateMaterialProperties();
                 }
@@ -1348,10 +1620,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         int _bubblesSeed = 1;
 
-        public int bubblesSeed {
+        public int bubblesSeed
+        {
             get { return _bubblesSeed; }
-            set {
-                if (_bubblesSeed != value) {
+            set
+            {
+                if (_bubblesSeed != value)
+                {
                     _bubblesSeed = value;
                     requireBubblesUpdate = true;
                     UpdateMaterialProperties();
@@ -1367,7 +1642,8 @@ namespace LiquidVolumeFX {
         #region Point Light support
 
         [Serializable]
-        public struct PointLightParams {
+        public struct PointLightParams
+        {
             [HideInInspector]
             public string name;
             [NonSerialized]
@@ -1395,10 +1671,13 @@ namespace LiquidVolumeFX {
         [SerializeField]
         bool _pointLightsEnabled;
 
-        public bool pointLightsEnabled {
+        public bool pointLightsEnabled
+        {
             get { return _pointLightsEnabled; }
-            set {
-                if (_pointLightsEnabled != value) {
+            set
+            {
+                if (_pointLightsEnabled != value)
+                {
                     _pointLightsEnabled = value;
                     UpdateMaterialProperties();
                 }
@@ -1510,7 +1789,8 @@ namespace LiquidVolumeFX {
         #region Gameloop events
 
 
-        void OnEnable() {
+        void OnEnable()
+        {
             if (!gameObject.activeInHierarchy)
                 return;
             levelMultipled = _level * _levelMultiplier;
@@ -1524,38 +1804,51 @@ namespace LiquidVolumeFX {
             lastRotation = transform.rotation;
             lastScale = transform.localScale;
             prevThickness = _flaskThickness;
-            if (_depthAwareCustomPass && transform.parent == null) {
+            if (_depthAwareCustomPass && transform.parent == null)
+            {
                 _depthAwareCustomPass = false;
             }
             CheckFPRenderTextureSetting();
             InitLayers();
             UpdateMaterialPropertiesNow();
             PointLightsInitialize();
-            if (!Application.isPlaying) {
-                if (_detail.isMultiple()) {
+            if (!Application.isPlaying)
+            {
+                if (_detail.isMultiple())
+                {
                     requireLayersUpdate = true;
                 }
                 shouldUpdateMaterialProperties = true;
             }
         }
 
-        void Reset() {
+        void Reset()
+        {
             // Try to assign propert topology based on mesh
             if (mesh == null)
                 return;
 
-            if (mesh.vertexCount == 24) {
+            if (mesh.vertexCount == 24)
+            {
                 topology = TOPOLOGY.Cube;
-            } else {
+            }
+            else
+            {
                 Renderer renderer = GetComponent<Renderer>();
-                if (renderer == null) {
-                    if (mesh.bounds.extents.y > mesh.bounds.extents.x) {
+                if (renderer == null)
+                {
+                    if (mesh.bounds.extents.y > mesh.bounds.extents.x)
+                    {
                         topology = TOPOLOGY.Cylinder;
                     }
-                } else if (renderer.bounds.extents.y > renderer.bounds.extents.x) {
+                }
+                else if (renderer.bounds.extents.y > renderer.bounds.extents.x)
+                {
                     topology = TOPOLOGY.Cylinder;
-                    if (!Application.isPlaying) {
-                        if (transform.rotation.eulerAngles != Vector3.zero && (mesh.bounds.extents.y <= mesh.bounds.extents.x || mesh.bounds.extents.y <= mesh.bounds.extents.z)) {
+                    if (!Application.isPlaying)
+                    {
+                        if (transform.rotation.eulerAngles != Vector3.zero && (mesh.bounds.extents.y <= mesh.bounds.extents.x || mesh.bounds.extents.y <= mesh.bounds.extents.z))
+                        {
                             Debug.LogWarning("Intrinsic model rotation detected. Consider using the Bake Transform and/or Center Pivot options in Advanced section.");
                         }
                     }
@@ -1565,28 +1858,35 @@ namespace LiquidVolumeFX {
         }
 
 
-        void OnDestroy() {
+        void OnDestroy()
+        {
 
             RestoreOriginalMesh();
 
             liqMat = null;
-            if (liqMatSimple != null) {
+            if (liqMatSimple != null)
+            {
                 DestroyImmediate(liqMatSimple);
                 liqMatSimple = null;
             }
-            if (liqMatDefaultNoFlask != null) {
+            if (liqMatDefaultNoFlask != null)
+            {
                 DestroyImmediate(liqMatDefaultNoFlask);
                 liqMatDefaultNoFlask = null;
             }
-            if (liqMatMultipleNoFlask != null) {
+            if (liqMatMultipleNoFlask != null)
+            {
                 DestroyImmediate(liqMatMultipleNoFlask);
                 liqMatMultipleNoFlask = null;
             }
 
-            if (noise3DTex != null) {
-                for (int k = 0; k < noise3DTex.Length; k++) {
+            if (noise3DTex != null)
+            {
+                for (int k = 0; k < noise3DTex.Length; k++)
+                {
                     Texture3D tex = noise3DTex[k];
-                    if (tex != null && tex.name.Contains("Clone")) {
+                    if (tex != null && tex.name.Contains("Clone"))
+                    {
                         DestroyImmediate(tex);
                         noise3DTex[k] = null;
                     }
@@ -1598,78 +1898,97 @@ namespace LiquidVolumeFX {
         }
 
 
-        void RenderObject() {
+        void RenderObject()
+        {
             var act = gameObject.activeInHierarchy && enabled;
 
-            if (shouldUpdateMaterialProperties || !Application.isPlaying) {
+            if (shouldUpdateMaterialProperties || !Application.isPlaying)
+            {
                 shouldUpdateMaterialProperties = false;
                 UpdateMaterialPropertiesNow();
             }
 
-            if (act && _allowViewFromInside) {
+            if (act && _allowViewFromInside)
+            {
                 CheckInsideOut();
             }
 
-            if (_detail.isMultiple()) {
+            if (_detail.isMultiple())
+            {
                 AnimateLayers();
             }
 
             UpdateAnimations();
 
-            if (_pointLightsEnabled) {
+            if (_pointLightsEnabled)
+            {
                 UpdateLightEffects();
             }
 
-            if (!act || _topology != TOPOLOGY.Irregular) {
+            if (!act || _topology != TOPOLOGY.Irregular)
+            {
                 LiquidVolumeDepthPrePassRenderFeature.RemoveLiquidFromBackRenderers(this);
-            } else if (_topology == TOPOLOGY.Irregular) {
+            }
+            else if (_topology == TOPOLOGY.Irregular)
+            {
                 LiquidVolumeDepthPrePassRenderFeature.AddLiquidToBackRenderers(this);
             }
 
             Transform parent = transform.parent;
-            if (parent != null) {
+            if (parent != null)
+            {
                 Renderer parentRenderer = GetComponentInParent<Renderer>();
-                if (!act || !_depthAwareCustomPass) {
+                if (!act || !_depthAwareCustomPass)
+                {
                     LiquidVolumeDepthPrePassRenderFeature.RemoveLiquidFromFrontRenderers(this);
-                } else if (_depthAwareCustomPass) {
+                }
+                else if (_depthAwareCustomPass)
+                {
                     LiquidVolumeDepthPrePassRenderFeature.AddLiquidToFrontRenderers(this);
                 }
             }
-            if (_debugSpillPoint) {
+            if (_debugSpillPoint)
+            {
                 UpdateSpillPointGizmo();
             }
 
 #if UNITY_EDITOR
             // Since Unity materials do not support color/vector arrays we need to submit them everytime to avoid losing the uniform values inside Unity Editor
-            if (_detail.isMultiple()) {
+            if (_detail.isMultiple())
+            {
                 UploadMaterialArrays();
             }
 #endif
         }
 
-        public void OnWillRenderObject() {
+        public void OnWillRenderObject()
+        {
             RenderObject();
         }
 
-        void FixedUpdate() {
+        void FixedUpdate()
+        {
             turbulenceSpeed += Time.deltaTime * 3f * _speed;
             liqMat.SetFloat(ShaderParams.TurbulenceSpeed, turbulenceSpeed * 4f);
             murkinessSpeed += Time.deltaTime * 0.05f * (shaderTurb.x + shaderTurb.y);
             liqMat.SetFloat(ShaderParams.MurkinessSpeed, murkinessSpeed);
             bubblesVerticalSpeedAcum += Time.deltaTime * _bubblesVerticalSpeed;
-            if (_detail.isMultiple()) {
+            if (_detail.isMultiple())
+            {
                 UpdateBubblesProperties();
             }
         }
 
-        void UpdateBubblesProperties() {
+        void UpdateBubblesProperties()
+        {
             if (_bubblesBrightness < 0)
                 _bubblesBrightness = 0;
             liqMat.SetVector(ShaderParams.BubblesData, new Vector4(100f / (1f + _bubblesScale), bubblesVerticalSpeedAcum, _bubblesBrightness, 0));
         }
 
 
-        void OnDidApplyAnimationProperties() {  // support for animating property based fields
+        void OnDidApplyAnimationProperties()
+        {  // support for animating property based fields
             shouldUpdateMaterialProperties = true;
         }
 
@@ -1677,11 +1996,13 @@ namespace LiquidVolumeFX {
 
         #region Internal stuff
 
-        void ReadVertices() {
+        void ReadVertices()
+        {
             if (mesh == null)
                 return;
 
-            if (!mesh.isReadable) {
+            if (!mesh.isReadable)
+            {
                 Debug.LogError("Mesh " + mesh.name + " is not readable. Please select your mesh and enable the Read/Write Enabled option.");
             }
 
@@ -1690,7 +2011,8 @@ namespace LiquidVolumeFX {
 
             verticesIndices = mesh.triangles;
 
-            if (verticesSorted == null || verticesSorted.Length != vertexCount) {
+            if (verticesSorted == null || verticesSorted.Length != vertexCount)
+            {
                 verticesSorted = new Vector3[vertexCount];
             }
             Array.Copy(verticesUnsorted, verticesSorted, vertexCount);
@@ -1698,16 +2020,19 @@ namespace LiquidVolumeFX {
             Array.Sort(verticesSorted, vertexComparer);
         }
 
-        int vertexComparer(Vector3 v0, Vector3 v1) {
+        int vertexComparer(Vector3 v0, Vector3 v1)
+        {
             if (v1.y < v0.y) return -1;
             if (v1.y > v0.y) return 1;
             return 0;
         }
 
 
-        void UpdateAnimations() {
+        void UpdateAnimations()
+        {
             // Check proper scale
-            switch (topology) {
+            switch (topology)
+            {
                 case TOPOLOGY.Sphere:
                     if (transform.localScale.y != transform.localScale.x || transform.localScale.z != transform.localScale.x)
                         transform.localScale = new Vector3(transform.localScale.x, transform.localScale.x, transform.localScale.x);
@@ -1719,13 +2044,16 @@ namespace LiquidVolumeFX {
             }
 
 
-            if (liqMat != null) {
+            if (liqMat != null)
+            {
                 Vector3 turbDir = Vector3.right;
                 Quaternion rot = transform.rotation;
-                if (_reactToForces) {
+                if (_reactToForces)
+                {
                     Quaternion instantRot = transform.rotation;
                     float dt = Time.smoothDeltaTime;
-                    if (Application.isPlaying && dt > 0) {
+                    if (Application.isPlaying && dt > 0)
+                    {
                         Vector3 instantVelocity = (transform.position - lastPosition) / dt;
                         Vector3 avgVelocity = (prev2Velocity + prevVelocity + instantVelocity) / 3f;
                         prev2Velocity = prevVelocity;
@@ -1739,9 +2067,12 @@ namespace LiquidVolumeFX {
                         float force = Mathf.Max(accelMag / _physicsMass - _physicsAngularDamp, 0f);
                         angularInertia += force;
                         angularVelocity += angularInertia;
-                        if (angularVelocity > 0) {
+                        if (angularVelocity > 0)
+                        {
                             angularInertia -= Mathf.Abs(angularVelocity) * _physicsMass / 100f;
-                        } else if (angularVelocity < 0) {
+                        }
+                        else if (angularVelocity < 0)
+                        {
                             angularInertia += Mathf.Abs(angularVelocity) * _physicsMass / 100f;
                         }
                         float damp = 1f - _physicsAngularDamp;
@@ -1749,7 +2080,8 @@ namespace LiquidVolumeFX {
                         inertia *= damp;
 
                         float mag = Mathf.Clamp(angularVelocity, -90f, 90f);
-                        if (inertia.x != 0 || inertia.z != 0) {
+                        if (inertia.x != 0 || inertia.z != 0)
+                        {
                             turbDir = inertia.normalized;
                         }
                         Vector3 axis = Vector3.Cross(turbDir, Vector3.down);
@@ -1758,20 +2090,26 @@ namespace LiquidVolumeFX {
                         float cinematic = Mathf.Abs(angularInertia) + Mathf.Abs(angularVelocity);
                         turbulenceDueForces = Mathf.Min(0.5f / _physicsMass, turbulenceDueForces + cinematic / 1000f);
                         turbulenceDueForces *= damp;
-                    } else {
+                    }
+                    else
+                    {
                         turbulenceDueForces = 0;
                     }
 
-                    if (_topology == TOPOLOGY.Sphere) {
+                    if (_topology == TOPOLOGY.Sphere)
+                    {
                         liquidRot = Quaternion.Lerp(liquidRot, instantRot, 0.1f);
                         rot = liquidRot;
                     }
-                } else if (turbulenceDueForces > 0) {
+                }
+                else if (turbulenceDueForces > 0)
+                {
                     turbulenceDueForces *= 0.1f;
                 }
                 Matrix4x4 m = Matrix4x4.TRS(Vector3.zero, rot, Vector3.one);
                 liqMat.SetMatrix(ShaderParams.RotationMatrix, m.inverse);
-                if (_topology != TOPOLOGY.Sphere) {
+                if (_topology != TOPOLOGY.Sphere)
+                {
                     float tx = turbDir.x;
                     turbDir.x += (turbDir.z - turbDir.x) * 0.25f;
                     turbDir.z += (tx - turbDir.z) * 0.25f;
@@ -1781,30 +2119,39 @@ namespace LiquidVolumeFX {
             }
 
             bool hasRotated = transform.rotation != lastRotation;
-            if (_reactToForces || hasRotated || transform.position != lastPosition || transform.localScale != lastScale) {
+            if (_reactToForces || hasRotated || transform.position != lastPosition || transform.localScale != lastScale)
+            {
                 UpdateLevels(hasRotated);
             }
         }
 
 
-        public void PointLightsRandomize() {
+        public void PointLightsRandomize()
+        {
             PointLightsInitialize(true);
         }
 
-        void PointLightsInitialize(bool randomize = false) {
-            if (pointLightParams == null) {
+        void PointLightsInitialize(bool randomize = false)
+        {
+            if (pointLightParams == null)
+            {
                 pointLightParams = new PointLightParams[6];
                 randomize = true;
-            } else if (pointLightParams.Length > 6) {
+            }
+            else if (pointLightParams.Length > 6)
+            {
                 Array.Resize<PointLightParams>(ref pointLightParams, 6);
             }
 
-            if (!_pointLightsEnabled) {
+            if (!_pointLightsEnabled)
+            {
                 UpdateLightEffects();
                 return;
             }
-            if (randomize) {
-                for (int k = 0; k < pointLightParams.Length; k++) {
+            if (randomize)
+            {
+                for (int k = 0; k < pointLightParams.Length; k++)
+                {
                     pointLightParams[k].localPosition = Vector3.zero;
                     pointLightParams[k].randomTargetCenter = new Vector3(0, -0.5f + _level * 0.5f, 0);
                     pointLightParams[k].color1 = new Color(Random.value, Random.value, Random.value);
@@ -1825,7 +2172,8 @@ namespace LiquidVolumeFX {
             }
         }
 
-        void SetNewLightTargetPos(int k) {
+        void SetNewLightTargetPos(int k)
+        {
             pointLightParams[k].targetPos = pointLightParams[k].randomTargetCenter + Random.insideUnitSphere * pointLightParams[k].randomTargetRadius;
             pointLightParams[k].targetPos.x = Mathf.Clamp(pointLightParams[k].targetPos.x, -0.4f, 0.4f);
             pointLightParams[k].targetPos.y = Mathf.Clamp(pointLightParams[k].targetPos.y, -0.4f, 0.4f);
@@ -1833,19 +2181,24 @@ namespace LiquidVolumeFX {
             pointLightParams[k].nextTargetTime = Time.time + Random.value + pointLightParams[k].nextTargetInterval;
         }
 
-        void UpdateLightEffects() {
+        void UpdateLightEffects()
+        {
 #if UNITY_EDITOR
-            if (lastPointLightCount != pointLightParams.Length) {
+            if (lastPointLightCount != pointLightParams.Length)
+            {
                 lastPointLightCount = pointLightParams.Length;
             }
-            for (int k = 0; k < pointLightParams.Length; k++) {
+            for (int k = 0; k < pointLightParams.Length; k++)
+            {
                 pointLightParams[k].name = "Light " + (k + 1);
             }
 #endif
             // Animate lights
-            for (int k = 0; k < pointLightParams.Length; k++) {
+            for (int k = 0; k < pointLightParams.Length; k++)
+            {
                 Vector3 curPos = pointLightParams[k].localPosition;
-                if (pointLightParams[k].randomTarget && Time.time > pointLightParams[k].nextTargetTime) {
+                if (pointLightParams[k].randomTarget && Time.time > pointLightParams[k].nextTargetTime)
+                {
                     SetNewLightTargetPos(k);
                 }
                 Vector3 targetPos = pointLightParams[k].targetPos;
@@ -1855,41 +2208,53 @@ namespace LiquidVolumeFX {
                 const float maxAccel = 5f;
                 if (accel.x > speed * maxAccel)
                     accel.x = speed * maxAccel;
-                else if (accel.x < speed * -maxAccel) {
+                else if (accel.x < speed * -maxAccel)
+                {
                     accel.x = speed * -maxAccel;
                 }
                 accel.y += curPos.y < targetPos.y ? speed : -speed;
                 if (accel.y > speed * maxAccel)
                     accel.y = speed * maxAccel;
-                else if (accel.y < speed * -maxAccel) {
+                else if (accel.y < speed * -maxAccel)
+                {
                     accel.y = speed * -maxAccel;
                 }
                 accel.z += curPos.z < targetPos.z ? speed : -speed;
                 if (accel.z > speed * maxAccel)
                     accel.z = speed * maxAccel;
-                else if (accel.z < speed * -maxAccel) {
+                else if (accel.z < speed * -maxAccel)
+                {
                     accel.z = speed * -maxAccel;
                 }
                 pointLightParams[k].accel = accel;
                 curPos += pointLightParams[k].accel;
-                if (curPos.x < -0.5) {
+                if (curPos.x < -0.5)
+                {
                     curPos.x = -0.5f;
                     pointLightParams[k].accel.x = 0;
-                } else if (curPos.x > 0.5f) {
+                }
+                else if (curPos.x > 0.5f)
+                {
                     curPos.x = 0.5f;
                     pointLightParams[k].accel.x = 0;
                 }
-                if (curPos.y < -0.5) {
+                if (curPos.y < -0.5)
+                {
                     curPos.y = -0.5f;
                     pointLightParams[k].accel.y = 0;
-                } else if (curPos.y > 0.5f) {
+                }
+                else if (curPos.y > 0.5f)
+                {
                     curPos.y = 0.5f;
                     pointLightParams[k].accel.y = 0;
                 }
-                if (curPos.z < -0.5) {
+                if (curPos.z < -0.5)
+                {
                     curPos.z = -0.5f;
                     pointLightParams[k].accel.z = 0;
-                } else if (curPos.z > 0.5f) {
+                }
+                else if (curPos.z > 0.5f)
+                {
                     curPos.z = 0.5f;
                     pointLightParams[k].accel.z = 0;
                 }
@@ -1897,32 +2262,40 @@ namespace LiquidVolumeFX {
             }
 
             // Pass data to shader
-            if (pointLightColorBuffer == null || pointLightColorBuffer.Length != 6) {
+            if (pointLightColorBuffer == null || pointLightColorBuffer.Length != 6)
+            {
                 pointLightColorBuffer = new Color[6];
             }
-            if (pointLightPositionBuffer == null || pointLightPositionBuffer.Length != 6) {
+            if (pointLightPositionBuffer == null || pointLightPositionBuffer.Length != 6)
+            {
                 pointLightPositionBuffer = new Vector4[6];
             }
             float range, multiplier;
-            for (int k = 0; k < 6; k++) {
+            for (int k = 0; k < 6; k++)
+            {
                 range = multiplier = 0;
-                if (_pointLightsEnabled && k < pointLightParams.Length) {
+                if (_pointLightsEnabled && k < pointLightParams.Length)
+                {
                     Vector3 pos = transform.TransformPoint(pointLightParams[k].localPosition);
                     pointLightPositionBuffer[k] = pos;
                     range = pointLightParams[k].lightRange * pointLightsScatteringAmount / 25f; // note: 25 comes from Unity point light attenuation equation
                     float intensity = pointLightParams[k].intensityMin + Mathf.PingPong(Time.time * pointLightParams[k].intensitySpeed, pointLightParams[k].intensityMax - pointLightParams[k].intensityMin);
                     multiplier = pointLightsIntensity * intensity;
                 }
-                if (range > 0 && multiplier > 0) {
+                if (range > 0 && multiplier > 0)
+                {
                     // Apply attenuation if light is affected by fog distance & falloff
                     Color pointLightColor = Color.Lerp(pointLightParams[k].color1, pointLightParams[k].color2, Mathf.PingPong(Time.time * pointLightParams[k].colorSpeed, 1f));
                     pointLightColorBuffer[k] = new Vector4(pointLightColor.r * multiplier, pointLightColor.g * multiplier, pointLightColor.b * multiplier, range);
-                } else {
+                }
+                else
+                {
                     pointLightColorBuffer[k] = Color.black;
                 }
             }
 
-            if (liqMat != null) {
+            if (liqMat != null)
+            {
                 liqMat.SetFloat(ShaderParams.PointLightInsideAtten, pointLightInsideAtten);
                 liqMat.SetColorArray(ShaderParams.PointLightColorArray, pointLightColorBuffer);
                 liqMat.SetVectorArray(ShaderParams.PointLightPositionArray, pointLightPositionBuffer);
@@ -1930,42 +2303,52 @@ namespace LiquidVolumeFX {
 
         }
 
-        public void UpdateMaterialProperties() {
-            if (Application.isPlaying) {
+        public void UpdateMaterialProperties()
+        {
+            if (Application.isPlaying)
+            {
                 shouldUpdateMaterialProperties = true;
-            } else {
+            }
+            else
+            {
                 UpdateMaterialPropertiesNow();
             }
 
         }
 
-        void UpdateMaterialPropertiesNow() {
+        void UpdateMaterialPropertiesNow()
+        {
             if (!gameObject.activeInHierarchy)
                 return;
 
-            switch (_detail) {
+            switch (_detail)
+            {
                 case DETAIL.Simple:
-                    if (liqMatSimple == null) {
+                    if (liqMatSimple == null)
+                    {
                         liqMatSimple = Instantiate(Resources.Load<Material>("Materials/LiquidVolumeSimple")) as Material;
                     }
                     liqMat = liqMatSimple;
                     break;
                 case DETAIL.Multiple:
                 case DETAIL.MultipleNoFlask:
-                    if (liqMatMultipleNoFlask == null) {
+                    if (liqMatMultipleNoFlask == null)
+                    {
                         liqMatMultipleNoFlask = Instantiate(Resources.Load<Material>("Materials/LiquidVolumeMultipleNoFlask")) as Material;
                     }
                     liqMat = liqMatMultipleNoFlask;
                     break;
                 default:
-                    if (liqMatDefaultNoFlask == null) {
+                    if (liqMatDefaultNoFlask == null)
+                    {
                         liqMatDefaultNoFlask = Instantiate(Resources.Load<Material>("Materials/LiquidVolumeDefaultNoFlask")) as Material;
                     }
                     liqMat = liqMatDefaultNoFlask;
                     break;
             }
 
-            if (_flaskMaterial == null) {
+            if (_flaskMaterial == null)
+            {
                 _flaskMaterial = Instantiate(Resources.Load<Material>("Materials/Flask"));
             }
 
@@ -1974,28 +2357,34 @@ namespace LiquidVolumeFX {
 
             CheckMeshDisplacement();
 
-            if (currentDetail != _detail) {
+            if (currentDetail != _detail)
+            {
                 currentDetail = _detail;
                 requireLayersUpdate = true;
             }
 
-            if (requireLayersUpdate && _detail.isMultiple()) {
+            if (requireLayersUpdate && _detail.isMultiple())
+            {
                 UpdateLayersNow();
             }
 
             UpdateLevels();
-            if (mr == null) 
+            if (mr == null)
                 return;
 
             // Try to compute submesh index heuristically if this is the first time the liquid has been added to a multi-material mesh
             mr.GetSharedMaterials(mrSharedMaterials);
             int sharedMaterialsCount = mrSharedMaterials.Count;
-            if (_subMeshIndex < 0) {
-                for (int w = 0; w < defaultContainerNames.Length; w++) {
+            if (_subMeshIndex < 0)
+            {
+                for (int w = 0; w < defaultContainerNames.Length; w++)
+                {
                     if (_subMeshIndex >= 0)
                         break;
-                    for (int k = 0; k < sharedMaterialsCount; k++) {
-                        if (mrSharedMaterials[k] != null && mrSharedMaterials[k] != _flaskMaterial && mrSharedMaterials[k].name.ToUpper().Contains(defaultContainerNames[w])) {
+                    for (int k = 0; k < sharedMaterialsCount; k++)
+                    {
+                        if (mrSharedMaterials[k] != null && mrSharedMaterials[k] != _flaskMaterial && mrSharedMaterials[k].name.ToUpper().Contains(defaultContainerNames[w]))
+                        {
                             _subMeshIndex = k;
                             break;
                         }
@@ -2005,18 +2394,25 @@ namespace LiquidVolumeFX {
             if (_subMeshIndex < 0)
                 _subMeshIndex = 0;
 
-            if (sharedMaterialsCount > 1 && _subMeshIndex >= 0 && _subMeshIndex < sharedMaterialsCount) {
+            if (sharedMaterialsCount > 1 && _subMeshIndex >= 0 && _subMeshIndex < sharedMaterialsCount)
+            {
                 mrSharedMaterials[_subMeshIndex] = liqMat;
-            } else {
+            }
+            else
+            {
                 mrSharedMaterials.Clear();
                 mrSharedMaterials.Add(liqMat);
             }
 
-            if (_flaskMaterial != null) {
+            if (_flaskMaterial != null)
+            {
                 bool shouldUseFlaskMaterial = _detail != DETAIL.DefaultNoFlask && _detail != DETAIL.MultipleNoFlask;
-                if (shouldUseFlaskMaterial && !mrSharedMaterials.Contains(_flaskMaterial)) {
+                if (shouldUseFlaskMaterial && !mrSharedMaterials.Contains(_flaskMaterial))
+                {
                     mrSharedMaterials.Add(_flaskMaterial);
-                } else if (!shouldUseFlaskMaterial && mrSharedMaterials.Contains(_flaskMaterial)) {
+                }
+                else if (!shouldUseFlaskMaterial && mrSharedMaterials.Contains(_flaskMaterial))
+                {
                     mrSharedMaterials.Remove(_flaskMaterial);
                 }
                 _flaskMaterial.renderQueue = _renderQueue + 1;
@@ -2030,7 +2426,8 @@ namespace LiquidVolumeFX {
 
             int scatteringPower = _scatteringPower;
             float scatteringAmount = _scatteringAmount;
-            if (!_scatteringEnabled) {
+            if (!_scatteringEnabled)
+            {
                 scatteringPower = 0;
                 scatteringAmount = 0;
             }
@@ -2042,9 +2439,12 @@ namespace LiquidVolumeFX {
             liqMat.SetFloat(ShaderParams.Alpha, _alpha);
 
             float alphaCombined = _alpha * Mathf.Clamp01((_liquidColor1.a + _liquidColor2.a) * 4f);
-            if (_ditherShadows) {
+            if (_ditherShadows)
+            {
                 liqMat.SetFloat(ShaderParams.AlphaCombined, alphaCombined);
-            } else {
+            }
+            else
+            {
                 liqMat.SetFloat(ShaderParams.AlphaCombined, alphaCombined > 0 ? 1000f : 0f);
             }
 
@@ -2053,7 +2453,8 @@ namespace LiquidVolumeFX {
             liqMat.SetFloat(ShaderParams.DepthAtten, _deepObscurance);
             Color smokeColor = ApplyGlobalAlpha(_smokeColor);
             int smokeRaySteps = _smokeRaySteps;
-            if (!_smokeEnabled) {
+            if (!_smokeEnabled)
+            {
                 smokeColor.a = 0;
                 smokeRaySteps = 1;
             }
@@ -2073,46 +2474,59 @@ namespace LiquidVolumeFX {
             liqMat.SetFloat(ShaderParams.FoamBottom, _foamVisibleFromBottom ? 1f : 0f);
             liqMat.SetFloat(ShaderParams.FoamTurbulence, _foamTurbulence);
 
-            switch (_detail) {
+            switch (_detail)
+            {
                 case DETAIL.Multiple:
                 case DETAIL.MultipleNoFlask:
                     UpdateBubblesProperties();
                     break;
             }
 
-            if (_noiseVariation != currentNoiseVariation || requireBubblesUpdate) {
+            if (_noiseVariation != currentNoiseVariation || requireBubblesUpdate)
+            {
                 requireBubblesUpdate = false;
                 currentNoiseVariation = _noiseVariation;
-                if (noise3DTex == null || noise3DTex.Length != 4) {
+                if (noise3DTex == null || noise3DTex.Length != 4)
+                {
                     noise3DTex = new Texture3D[4];
                 }
-                if (noise3DTex[currentNoiseVariation] == null) {
+                if (noise3DTex[currentNoiseVariation] == null)
+                {
                     noise3DTex[currentNoiseVariation] = Resources.Load<Texture3D>("Textures/Noise3D" + currentNoiseVariation.ToString());
                 }
                 Texture3D tex3d = noise3DTex[currentNoiseVariation];
-                if (tex3d != null) {
-                    if (_detail.isMultiple()) {
-                        if (!tex3d.name.Contains("Clone")) {
+                if (tex3d != null)
+                {
+                    if (_detail.isMultiple())
+                    {
+                        if (!tex3d.name.Contains("Clone"))
+                        {
                             tex3d = Instantiate(tex3d);
                             tex3d.hideFlags = HideFlags.DontSave;
                             noise3DTex[currentNoiseVariation] = tex3d;
                         }
                         if (_bubblesAmount < 0)
                             _bubblesAmount = 0;
-                        if (colors3D == null || colors3D.Length != 4) {
+                        if (colors3D == null || colors3D.Length != 4)
+                        {
                             colors3D = new Color[4][];
                         }
-                        if (colors3D[currentNoiseVariation] == null) {
+                        if (colors3D[currentNoiseVariation] == null)
+                        {
                             colors3D[currentNoiseVariation] = tex3d.GetPixels();
                             int length = colors3D[currentNoiseVariation].Length;
-                            if (colors3DWithBubbles == null || colors3DWithBubbles.Length != 4) {
+                            if (colors3DWithBubbles == null || colors3DWithBubbles.Length != 4)
+                            {
                                 colors3DWithBubbles = new Color[4][];
                             }
                             colors3DWithBubbles[currentNoiseVariation] = new Color[length];
                         }
-                        if (_bubblesAmount > 0 && _detail.isMultiple()) {
+                        if (_bubblesAmount > 0 && _detail.isMultiple())
+                        {
                             AddBubbles(tex3d);
-                        } else {
+                        }
+                        else
+                        {
                             ClearBubbles(tex3d);
                         }
                     }
@@ -2124,33 +2538,42 @@ namespace LiquidVolumeFX {
             liqMat.renderQueue = _renderQueue;
             UpdateInsideOut();
 
-            if (_topology == TOPOLOGY.Irregular) {
-                if (prevThickness != _flaskThickness) {
+            if (_topology == TOPOLOGY.Irregular)
+            {
+                if (prevThickness != _flaskThickness)
+                {
                     prevThickness = _flaskThickness;
                 }
             }
         }
 
-        Color ApplyGlobalAlpha(Color originalColor) {
+        Color ApplyGlobalAlpha(Color originalColor)
+        {
             return new Color(originalColor.r, originalColor.g, originalColor.b, originalColor.a * _alpha);
         }
 
 
-        void GetRenderer() {
+        void GetRenderer()
+        {
             MeshFilter mf = GetComponent<MeshFilter>();
-            if (mf != null) {
+            if (mf != null)
+            {
                 mesh = mf.sharedMesh;
                 mr = GetComponent<MeshRenderer>();
-            } else {
+            }
+            else
+            {
                 SkinnedMeshRenderer smr = GetComponent<SkinnedMeshRenderer>();
-                if (smr != null) {
+                if (smr != null)
+                {
                     mesh = smr.sharedMesh;
                     mr = smr;
                 }
             }
         }
 
-        void UpdateLevels(bool updateShaderKeywords = true) {
+        void UpdateLevels(bool updateShaderKeywords = true)
+        {
 
             _level = Mathf.Clamp01(_level);
             levelMultipled = _level * _levelMultiplier;
@@ -2158,13 +2581,17 @@ namespace LiquidVolumeFX {
             if (liqMat == null)
                 return;
 
-            if (mesh == null) {
+            if (mesh == null)
+            {
                 GetRenderer();
                 ReadVertices();
-            } else if (mr == null) {
+            }
+            else if (mr == null)
+            {
                 GetRenderer();
             }
-            if (mesh == null || mr == null) {
+            if (mesh == null || mr == null)
+            {
                 return;
             }
 
@@ -2182,19 +2609,24 @@ namespace LiquidVolumeFX {
 
             // Compensate levelpos with upperlimit
             float rotationAdjustment;
-            if (_upperLimit < 1f && !_ignoreGravity) {
+            if (_upperLimit < 1f && !_ignoreGravity)
+            {
                 float y1 = transform.TransformPoint(Vector3.up * extents.y).y;
                 float y0 = transform.TransformPoint(Vector3.up * (extents.y * _upperLimit)).y;
                 rotationAdjustment = Mathf.Max(y0 - y1, 0);
-            } else {
+            }
+            else
+            {
                 rotationAdjustment = 0;
             }
 
             // Compensate rotation in cylindrical shapes where mesh height is on another scale than width
             float thisLevel = levelMultipled;
-            if (!_ignoreGravity && _rotationLevelBias > 0 && thisLevel > 0) {
+            if (!_ignoreGravity && _rotationLevelBias > 0 && thisLevel > 0)
+            {
                 Vector3 mrCenter = mr.bounds.center;
-                if (lastLevelVolumeRef != thisLevel) {
+                if (lastLevelVolumeRef != thisLevel)
+                {
 
                     lastLevelVolumeRef = thisLevel;
                     Quaternion q = transform.rotation;
@@ -2216,14 +2648,18 @@ namespace LiquidVolumeFX {
 
                 float maxLevel = Mathf.Clamp01(thisLevel + 0.5f);
                 float minLevel = Mathf.Clamp01(thisLevel - 0.5f);
-                for (int i = 0; i < 12; i++) {
+                for (int i = 0; i < 12; i++)
+                {
                     thisLevel = (minLevel + maxLevel) * 0.5f;
                     // Supposed liquid level pos?
                     liquidLevelPos = mrCenter.y - extents.y + extents.y * 2f * thisLevel;
                     float volume = GetMeshVolumeUnderLevel(liquidLevelPos, mrCenter);
-                    if (volume < volumeRef) {
+                    if (volume < volumeRef)
+                    {
                         minLevel = thisLevel;
-                    } else {
+                    }
+                    else
+                    {
                         if (i >= 8)
                             break;
                         maxLevel = thisLevel;
@@ -2231,7 +2667,9 @@ namespace LiquidVolumeFX {
                 }
 
                 thisLevel = Mathf.Lerp(levelMultipled, thisLevel * _levelMultiplier, _rotationLevelBias);
-            } else {
+            }
+            else
+            {
                 if (levelMultipled <= 0)
                     thisLevel = -0.001f; // ensure it's below the flask thickness
             }
@@ -2256,34 +2694,45 @@ namespace LiquidVolumeFX {
             liqMat.SetVector(ShaderParams.Scale, new Vector4(_smokeScale / scaleFactor, _foamScale / scaleFactor, _liquidScale1 / scaleFactor, _liquidScale2 / scaleFactor));
             liqMat.SetVector(ShaderParams.Center, transform.position);
 
-            if (shaderKeywords == null || shaderKeywords.Length != 6) {
+            if (shaderKeywords == null || shaderKeywords.Length != 6)
+            {
                 shaderKeywords = new string[6];
             }
-            for (int k = 0; k < shaderKeywords.Length; k++) {
+            for (int k = 0; k < shaderKeywords.Length; k++)
+            {
                 shaderKeywords[k] = null;
             }
 
-            if (_detail.isMultiple()) {
+            if (_detail.isMultiple())
+            {
                 liqMat.SetFloat(ShaderParams.SizeWorld, mr.bounds.size.y);
             }
 
-            if (_depthAware) {
+            if (_depthAware)
+            {
                 shaderKeywords[SHADER_KEYWORD_DEPTH_AWARE_INDEX] = SHADER_KEYWORD_DEPTH_AWARE;
                 liqMat.SetFloat(ShaderParams.DepthAwareOffset, _depthAwareOffset);
             }
 
-            if (_depthAwareCustomPass) {
+            if (_depthAwareCustomPass)
+            {
                 shaderKeywords[SHADER_KEYWORD_DEPTH_AWARE_CUSTOM_PASS_INDEX] = SHADER_KEYWORD_DEPTH_AWARE_CUSTOM_PASS;
             }
 
-            if (_reactToForces && _topology == TOPOLOGY.Sphere) {
+            if (_reactToForces && _topology == TOPOLOGY.Sphere)
+            {
                 shaderKeywords[SHADER_KEYWORD_IGNORE_GRAVITY_INDEX] = SHADER_KEYWORD_IGNORE_GRAVITY;
-            } else if (_ignoreGravity) {
+            }
+            else if (_ignoreGravity)
+            {
                 shaderKeywords[SHADER_KEYWORD_IGNORE_GRAVITY_INDEX] = SHADER_KEYWORD_IGNORE_GRAVITY;
-            } else if (transform.rotation.eulerAngles != Vector3.zero) {
+            }
+            else if (transform.rotation.eulerAngles != Vector3.zero)
+            {
                 shaderKeywords[SHADER_KEYWORD_NON_AABB_INDEX] = SHADER_KEYWORD_NON_AABB;
             }
-            switch (_topology) {
+            switch (_topology)
+            {
                 case TOPOLOGY.Sphere:
                     shaderKeywords[SHADER_KEYWORD_TOPOLOGY_INDEX] = SHADER_KEYWORD_SPHERE;
                     break;
@@ -2297,10 +2746,12 @@ namespace LiquidVolumeFX {
                     shaderKeywords[SHADER_KEYWORD_TOPOLOGY_INDEX] = SHADER_KEYWORD_IRREGULAR;
                     break;
             }
-            if (_refractionBlur) {
+            if (_refractionBlur)
+            {
                 shaderKeywords[SHADER_KEYWORD_REFRACTION_INDEX] = SHADER_KEYWORD_USE_REFRACTION;
             }
-            if (updateShaderKeywords) {
+            if (updateShaderKeywords)
+            {
                 liqMat.shaderKeywords = shaderKeywords;
             }
 
@@ -2310,18 +2761,22 @@ namespace LiquidVolumeFX {
         }
 
 
-        void RotateVertices() {
+        void RotateVertices()
+        {
             int vertexCount = verticesUnsorted.Length;
-            if (rotatedVertices == null || rotatedVertices.Length != vertexCount) {
+            if (rotatedVertices == null || rotatedVertices.Length != vertexCount)
+            {
                 rotatedVertices = new Vector3[vertexCount];
             }
-            for (int k = 0; k < vertexCount; k++) {
+            for (int k = 0; k < vertexCount; k++)
+            {
                 rotatedVertices[k] = transform.TransformPoint(verticesUnsorted[k]);
             }
         }
 
 
-        float SignedVolumeOfTriangle(ref Vector3 p1, ref Vector3 p2, ref Vector3 p3) {
+        float SignedVolumeOfTriangle(ref Vector3 p1, ref Vector3 p2, ref Vector3 p3)
+        {
             float v321 = p3.x * p2.y * p1.z;
             float v231 = p2.x * p3.y * p1.z;
             float v312 = p3.x * p1.y * p2.z;
@@ -2331,9 +2786,11 @@ namespace LiquidVolumeFX {
             return (1.0f / 6.0f) * (-v321 + v231 + v312 - v132 - v213 + v123);
         }
 
-        float GetMeshVolumeUnderLevel(float level, Vector3 zeroPoint) {
+        float GetMeshVolumeUnderLevel(float level, Vector3 zeroPoint)
+        {
             float vol = 0;
-            for (int k = 0; k < verticesIndices.Length; k += 3) {
+            for (int k = 0; k < verticesIndices.Length; k += 3)
+            {
                 Vector3 p1 = rotatedVertices[verticesIndices[k]];
                 Vector3 p2 = rotatedVertices[verticesIndices[k + 1]];
                 Vector3 p3 = rotatedVertices[verticesIndices[k + 2]];
@@ -2349,7 +2806,8 @@ namespace LiquidVolumeFX {
         }
 
 
-        void UpdateTurbulence() {
+        void UpdateTurbulence()
+        {
             if (liqMat == null)
                 return;
             float visibleLevel = 1f; // (_level<=0 || _level>=1f) ? 0.1f: 1f;	// commented out to allow animation even level is 0 or full
@@ -2362,9 +2820,11 @@ namespace LiquidVolumeFX {
             liqMat.SetVector(ShaderParams.Turbulence, shaderTurb);
         }
 
-        void CheckInsideOut() {
+        void CheckInsideOut()
+        {
             Camera cam = Camera.current;
-            if (cam == null || mr == null) {
+            if (cam == null || mr == null)
+            {
                 if (!_allowViewFromInside)
                     UpdateInsideOut();
                 return;
@@ -2378,7 +2838,8 @@ namespace LiquidVolumeFX {
 
             // Check if position is inside container
             bool nowInside = false;
-            switch (_topology) {
+            switch (_topology)
+            {
                 case TOPOLOGY.Cube:
                     nowInside = PointInAABB(currentCamPos);
                     break;
@@ -2391,31 +2852,38 @@ namespace LiquidVolumeFX {
                     break;
             }
 
-            if (nowInside != camInside) {
+            if (nowInside != camInside)
+            {
                 camInside = nowInside;
                 UpdateInsideOut();
             }
         }
 
 
-        bool PointInAABB(Vector3 point) {
+        bool PointInAABB(Vector3 point)
+        {
             point = transform.InverseTransformPoint(point);
             Vector3 ext = mesh.bounds.extents;
             if (point.x < ext.x && point.x > -ext.x &&
                 point.y < ext.y && point.y > -ext.y &&
-                point.z < ext.z && point.z > -ext.z) {
+                point.z < ext.z && point.z > -ext.z)
+            {
                 return true;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
 
-        bool PointInCylinder(Vector3 point) {
+        bool PointInCylinder(Vector3 point)
+        {
             point = transform.InverseTransformPoint(point);
             Vector3 ext = mesh.bounds.extents;
             if (point.x < ext.x && point.x > -ext.x &&
                 point.y < ext.y && point.y > -ext.y &&
-                point.z < ext.z && point.z > -ext.z) {
+                point.z < ext.z && point.z > -ext.z)
+            {
 
                 point.y = 0;
                 Vector3 currentPos = transform.position;
@@ -2426,20 +2894,26 @@ namespace LiquidVolumeFX {
         }
 
 
-        void UpdateInsideOut() {
+        void UpdateInsideOut()
+        {
             if (liqMat == null)
                 return;
-            if (_allowViewFromInside && camInside) {
+            if (_allowViewFromInside && camInside)
+            {
                 liqMat.SetInt(ShaderParams.CullMode, (int)CullMode.Front);
                 liqMat.SetInt(ShaderParams.ZTestMode, (int)CompareFunction.Always);
-                if (_flaskMaterial != null) {
+                if (_flaskMaterial != null)
+                {
                     _flaskMaterial.SetInt(ShaderParams.CullMode, (int)CullMode.Front);
                     _flaskMaterial.SetInt(ShaderParams.ZTestMode, (int)CompareFunction.Always);
                 }
-            } else {
+            }
+            else
+            {
                 liqMat.SetInt(ShaderParams.CullMode, (int)CullMode.Back);
                 liqMat.SetInt(ShaderParams.ZTestMode, (int)CompareFunction.LessEqual);
-                if (_flaskMaterial != null) {
+                if (_flaskMaterial != null)
+                {
                     _flaskMaterial.SetInt(ShaderParams.CullMode, (int)CullMode.Back);
                     _flaskMaterial.SetInt(ShaderParams.ZTestMode, (int)CompareFunction.LessEqual);
                 }
@@ -2456,8 +2930,10 @@ namespace LiquidVolumeFX {
         /// Returns the vertical position in world space coordinates of the liquid surface
         /// </summary>
         /// <value>The get liquid surface Y position.</value>
-        public float liquidSurfaceYPosition {
-            get {
+        public float liquidSurfaceYPosition
+        {
+            get
+            {
                 return liquidLevelPos;
             }
         }
@@ -2465,14 +2941,17 @@ namespace LiquidVolumeFX {
         /// <summary>
         /// Changes the transform position and/or rotation of a floating object.
         /// </summary>
-        public void MoveToLiquidSurface(Transform transform, BuoyancyEffect effect, Transform root = null, float dampen = 0.8f) {
+        public void MoveToLiquidSurface(Transform transform, BuoyancyEffect effect, Transform root = null, float dampen = 0.8f)
+        {
             Vector3 position = transform.position;
-            if (effect == BuoyancyEffect.Simple) {
+            if (effect == BuoyancyEffect.Simple)
+            {
                 position.y = liquidLevelPos;
                 transform.position = position;
                 return;
             }
-            if (effect == BuoyancyEffect.PositionOnly) {
+            if (effect == BuoyancyEffect.PositionOnly)
+            {
                 Vector4 shaderTurb = liqMat.GetVector("_Turbulence");
                 float sizeY = liqMat.GetVector("_Size").y;
                 float turbFactor = shaderTurb.y * 0.05f * sizeY * _foamTurbulence;
@@ -2484,13 +2963,16 @@ namespace LiquidVolumeFX {
             }
 
             // Position and rotation
-            if (effect == BuoyancyEffect.PositionAndRotation) {
-                if (root == null) {
+            if (effect == BuoyancyEffect.PositionAndRotation)
+            {
+                if (root == null)
+                {
                     Debug.LogError("No root specified when calling MoveToLiquidSurface(..). Usually the root is a parent object that receives the buoyancy position and rotation changes.");
                 }
                 Vector4 shaderTurb = liqMat.GetVector("_Turbulence");
                 Collider collider = transform.GetComponent<Collider>();
-                if (collider == null) {
+                if (collider == null)
+                {
                     Debug.LogError("No collider found in object used when calling MoveToLiquidSurface(..) of Liquid Volume.");
                     return;
                 }
@@ -2520,7 +3002,8 @@ namespace LiquidVolumeFX {
         /// <returns><c>true</c>, if spill point is detected, <c>false</c> otherwise.</returns>
         /// <param name="spillPosition">Returned spill position in world space coordinates.</param>
         /// <param name="apertureStart">A value that determines where the aperture of the flask starts (0-1 where 0 is flask center and 1 is the very top).</param>
-        public bool GetSpillPoint(out Vector3 spillPosition, float apertureStart = 1f) {
+        public bool GetSpillPoint(out Vector3 spillPosition, float apertureStart = 1f)
+        {
             float spillAmount;
             return GetSpillPoint(out spillPosition, out spillAmount, apertureStart);
         }
@@ -2534,16 +3017,19 @@ namespace LiquidVolumeFX {
         /// <param name="spillPosition">Returned spill position in world space coordinates.</param>
         /// <param name="spillAmount">A returned value that represent the amount of liquid spilt.</param>
         /// <param name="apertureStart">A value that determines where the aperture of the flask starts (0-1 where 0 is flask center and 1 is the very top).</param>
-        public bool GetSpillPoint(out Vector3 spillPosition, out float spillAmount, float apertureStart = 1f) {
+        public bool GetSpillPoint(out Vector3 spillPosition, out float spillAmount, float apertureStart = 1f)
+        {
             spillPosition = Vector3.zero;
             spillAmount = 0;
             if (mesh == null || verticesSorted == null || levelMultipled <= 0)
                 return false;
 
             float maxy = float.MinValue;
-            for (int k = 0; k < verticesSorted.Length; k++) {
+            for (int k = 0; k < verticesSorted.Length; k++)
+            {
                 Vector3 vertex = verticesSorted[k];
-                if (vertex.y > maxy) {
+                if (vertex.y > maxy)
+                {
                     maxy = vertex.y;
                 }
             }
@@ -2551,12 +3037,14 @@ namespace LiquidVolumeFX {
             Vector3 vt = transform.position;
             bool crossed = false;
             float miny = float.MaxValue;
-            for (int k = 0; k < verticesSorted.Length; k++) {
+            for (int k = 0; k < verticesSorted.Length; k++)
+            {
                 Vector3 vertex = verticesSorted[k];
                 if (vertex.y < clampy)
                     break;
                 vertex = transform.TransformPoint(vertex);
-                if (vertex.y < liquidLevelPos && vertex.y < miny) {
+                if (vertex.y < liquidLevelPos && vertex.y < miny)
+                {
                     miny = vertex.y;
                     vt = vertex;
                     crossed = true;
@@ -2571,18 +3059,23 @@ namespace LiquidVolumeFX {
         }
 
 
-        void UpdateSpillPointGizmo() {
-            if (!_debugSpillPoint) {
-                if (spillPointGizmo != null) {
+        void UpdateSpillPointGizmo()
+        {
+            if (!_debugSpillPoint)
+            {
+                if (spillPointGizmo != null)
+                {
                     DestroyImmediate(spillPointGizmo.gameObject);
                     spillPointGizmo = null;
                 }
                 return;
             }
 
-            if (spillPointGizmo == null) {
+            if (spillPointGizmo == null)
+            {
                 Transform t = transform.Find(SPILL_POINT_GIZMO);
-                if (t != null) {
+                if (t != null)
+                {
                     DestroyImmediate(t.gameObject);
                 }
                 spillPointGizmo = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -2592,7 +3085,8 @@ namespace LiquidVolumeFX {
                 if (collider != null)
                     DestroyImmediate(collider);
                 MeshRenderer mr = spillPointGizmo.GetComponent<MeshRenderer>();
-                if (mr != null) {
+                if (mr != null)
+                {
                     mr.sharedMaterial = Instantiate(mr.sharedMaterial); // to avoid Editor (non playing) warning
                     mr.sharedMaterial.hideFlags = HideFlags.DontSave;
                     mr.sharedMaterial.color = Color.yellow;
@@ -2600,18 +3094,24 @@ namespace LiquidVolumeFX {
             }
 
             Vector3 spillPoint;
-            if (GetSpillPoint(out spillPoint, 1f)) {
+            if (GetSpillPoint(out spillPoint, 1f))
+            {
                 spillPointGizmo.transform.position = spillPoint;
-                if (mesh != null) {
+                if (mesh != null)
+                {
                     Vector3 size = mesh.bounds.extents * 0.2f;
                     float s = size.x > size.y ? size.x : size.z;
                     s = s > size.z ? s : size.z;
                     spillPointGizmo.transform.localScale = new Vector3(s, s, s);
-                } else {
+                }
+                else
+                {
                     spillPointGizmo.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
                 }
                 spillPointGizmo.SetActive(true);
-            } else {
+            }
+            else
+            {
                 spillPointGizmo.SetActive(false);
             }
 
@@ -2621,9 +3121,11 @@ namespace LiquidVolumeFX {
         /// Applies current transform rotation and scale to the vertices and resets the transform rotation and scale to default values.
         /// This operation makes the game object transform point upright as normal game objects and is required for Liquid Volume to work on imported models that comes with a rotation
         /// </summary>
-        public void BakeRotation() {
+        public void BakeRotation()
+        {
 
-            if (transform.localRotation == transform.rotation) {
+            if (transform.localRotation == transform.rotation)
+            {
                 // nothing to do!
                 return;
             }
@@ -2638,11 +3140,13 @@ namespace LiquidVolumeFX {
             transform.localScale = Vector3.one;
 
             Transform parent = transform.parent;
-            if (parent != null) {
+            if (parent != null)
+            {
                 transform.SetParent(null, false);
             }
 
-            for (int k = 0; k < vertices.Length; k++) {
+            for (int k = 0; k < vertices.Length; k++)
+            {
                 vertices[k] = transform.TransformVector(vertices[k]);
             }
             mesh.vertices = vertices;
@@ -2651,7 +3155,8 @@ namespace LiquidVolumeFX {
             mf.sharedMesh = mesh;
 
             // Ensure parent has no different rotation
-            if (parent != null) {
+            if (parent != null)
+            {
                 transform.SetParent(parent, false);
                 transform.localPosition = localPos;
             }
@@ -2665,7 +3170,8 @@ namespace LiquidVolumeFX {
         /// <summary>
         /// This operation computes the geometric center of all vertices and displaces them so the pivot is centered in the model
         /// </summary>
-        public void CenterPivot() {
+        public void CenterPivot()
+        {
             CenterPivot(Vector3.zero, false);
         }
 
@@ -2675,7 +3181,8 @@ namespace LiquidVolumeFX {
         /// <summary>
         /// This operation computes the geometric center of all vertices and displaces them so the pivot is centered in the model
         /// </summary>
-        public void CenterPivot(Vector3 offset, bool closeMesh) {
+        public void CenterPivot(Vector3 offset, bool closeMesh)
+        {
 
             MeshFilter mf = GetComponent<MeshFilter>();
             Mesh mesh = mf.sharedMesh;
@@ -2686,9 +3193,11 @@ namespace LiquidVolumeFX {
 
             Vector3[] vertices = mesh.vertices;
 
-            if (closeMesh) {
+            if (closeMesh)
+            {
                 hullVertices.Clear();
-                for (int k = 0; k < vertices.Length; k++) {
+                for (int k = 0; k < vertices.Length; k++)
+                {
                     hullVertices.Add(new Vertex(vertices[k]));
                 }
 
@@ -2699,7 +3208,8 @@ namespace LiquidVolumeFX {
                 var xxx = result.Points.ToList();
 
                 List<int> triangles = new List<int>();
-                foreach (var face in result.Faces) {
+                foreach (var face in result.Faces)
+                {
                     triangles.Add(xxx.IndexOf(face.Vertices[0]));
                     triangles.Add(xxx.IndexOf(face.Vertices[1]));
                     triangles.Add(xxx.IndexOf(face.Vertices[2]));
@@ -2712,17 +3222,20 @@ namespace LiquidVolumeFX {
             }
 
             Vector3 midPoint = Vector3.zero;
-            for (int k = 0; k < vertices.Length; k++) {
+            for (int k = 0; k < vertices.Length; k++)
+            {
                 midPoint += vertices[k];
             }
             midPoint /= vertices.Length;
             midPoint += offset;
-            for (int k = 0; k < vertices.Length; k++) {
+            for (int k = 0; k < vertices.Length; k++)
+            {
                 vertices[k] -= midPoint;
             }
             mesh.vertices = vertices;
             mesh.RecalculateBounds();
-            if (closeMesh) {
+            if (closeMesh)
+            {
                 mesh.RecalculateNormals();
             }
             mf.sharedMesh = mesh;
@@ -2738,9 +3251,11 @@ namespace LiquidVolumeFX {
             RefreshCollider();
         }
 
-        public void RefreshCollider() {
+        public void RefreshCollider()
+        {
             MeshCollider mc = GetComponent<MeshCollider>();
-            if (mc != null) {
+            if (mc != null)
+            {
                 Mesh oldMesh = mc.sharedMesh;
                 mc.sharedMesh = null;
                 mc.sharedMesh = oldMesh;
@@ -2752,11 +3267,13 @@ namespace LiquidVolumeFX {
         /// </summary>
         /// <param name="newDensity">New density.</param>
         /// <param name="keepVolume">If set to <c>true</c> keep volume.</param>
-        public void SetLayerDensity(int layerIndex, float newDensity, bool keepVolume) {
+        public void SetLayerDensity(int layerIndex, float newDensity, bool keepVolume)
+        {
             if (layerIndex < 0 || _liquidLayers == null || layerIndex >= _liquidLayers.Length)
                 return;
             float amount = _liquidLayers[layerIndex].amount;
-            if (keepVolume && _liquidLayers[layerIndex].density > 0) {
+            if (keepVolume && _liquidLayers[layerIndex].density > 0)
+            {
                 amount *= newDensity / _liquidLayers[layerIndex].density;
             }
             _liquidLayers[layerIndex].amount = amount;
@@ -2768,51 +3285,63 @@ namespace LiquidVolumeFX {
 
         #region Multiple layers
 
-        void InitLayers() {
+        void InitLayers()
+        {
             requireLayersUpdate = true;
             lastLayerCount = -1;
 
             if (_liquidLayers == null)
                 return;
-            for (int k = 0; k < _liquidLayers.Length; k++) {
+            for (int k = 0; k < _liquidLayers.Length; k++)
+            {
                 _liquidLayers[k].ResetCurrentStates();
             }
         }
 
-        public void UpdateLayers(bool immediate = false) {
+        public void UpdateLayers(bool immediate = false)
+        {
             shouldUpdateMaterialProperties = true;
             requireLayersUpdate = true;
             lastLayerCount = _liquidLayers.Length;
-            if (immediate) {
+            if (immediate)
+            {
                 this.immediate = true;
                 RenderObject();
             }
         }
 
-        void UpdateLayersNow() {
+        void UpdateLayersNow()
+        {
 
             requireLayersUpdate = false;
 
-            if (_liquidLayers == null) {
+            if (_liquidLayers == null)
+            {
                 _liquidLayers = new LiquidLayer[0];
-            } else if (_liquidLayers.Length > MAX_LAYERS) {
+            }
+            else if (_liquidLayers.Length > MAX_LAYERS)
+            {
                 Array.Resize(ref _liquidLayers, MAX_LAYERS);
                 Debug.Log("Liquid layers max count exceeded. Capping to " + MAX_LAYERS + ".");
             }
 
-            if (lastLayerCount >= 0 && lastLayerCount < _liquidLayers.Length) {
-                for (int k = lastLayerCount; k < _liquidLayers.Length; k++) {
+            if (lastLayerCount >= 0 && lastLayerCount < _liquidLayers.Length)
+            {
+                for (int k = lastLayerCount; k < _liquidLayers.Length; k++)
+                {
                     _liquidLayers[k].SetDefaults();
                 }
             }
             lastLayerCount = _liquidLayers.Length;
 
-            if (sortedLayers == null || sortedLayers.Length < MAX_LAYERS) {
+            if (sortedLayers == null || sortedLayers.Length < MAX_LAYERS)
+            {
                 sortedLayers = new int[MAX_LAYERS];
             }
 
             // ensure proper values
-            for (int k = 0; k < _liquidLayers.Length; k++) {
+            for (int k = 0; k < _liquidLayers.Length; k++)
+            {
                 _liquidLayers[k].amount = Mathf.Max(0, _liquidLayers[k].amount);
                 _liquidLayers[k].layerName = "Layer " + k;
                 _liquidLayers[k].scale = Mathf.Clamp(_liquidLayers[k].scale, 0.001f, 0.48f);
@@ -2827,20 +3356,25 @@ namespace LiquidVolumeFX {
             sortedLayersCount = 0;
             float currentDensity = float.MaxValue;
             float baseLevel = 0;
-            for (int k = 0; k < _liquidLayers.Length; k++) {
+            for (int k = 0; k < _liquidLayers.Length; k++)
+            {
                 float maxDensity = float.MinValue;
                 // Pick greater density first
-                for (int j = 0; j < _liquidLayers.Length; j++) {
+                for (int j = 0; j < _liquidLayers.Length; j++)
+                {
                     float density = _liquidLayers[j].density;
-                    if (density > maxDensity && density < currentDensity) {
+                    if (density > maxDensity && density < currentDensity)
+                    {
                         maxDensity = density;
                     }
                 }
                 if (maxDensity == float.MinValue)
                     break;
                 // Place layers of the mix
-                for (int j = 0; j < _liquidLayers.Length; j++) {
-                    if (_liquidLayers[j].density == maxDensity) {
+                for (int j = 0; j < _liquidLayers.Length; j++)
+                {
+                    if (_liquidLayers[j].density == maxDensity)
+                    {
                         _liquidLayers[j].baseLevel = baseLevel;
                         sortedLayers[sortedLayersCount++] = j;
                         baseLevel += _liquidLayers[j].amount;
@@ -2849,14 +3383,17 @@ namespace LiquidVolumeFX {
                 currentDensity = maxDensity;
             }
             // Handle miscible layers
-            for (int k = 0; k < sortedLayersCount; k++) {
+            for (int k = 0; k < sortedLayersCount; k++)
+            {
                 int i = sortedLayers[k];
-                if (_liquidLayers[i].miscible) {
+                if (_liquidLayers[i].miscible)
+                {
                     LiquidLayer temp = new LiquidLayer();
                     int j = k;
                     float groupBaseLevel = _liquidLayers[i].baseLevel;
                     float groupDensity = _liquidLayers[i].density;
-                    while (_liquidLayers[i].miscible && _liquidLayers[i].density == groupDensity) {
+                    while (_liquidLayers[i].miscible && _liquidLayers[i].density == groupDensity)
+                    {
                         float amount = Mathf.Max(_liquidLayers[i].amount, 0.0001f);
                         temp.color += _liquidLayers[i].color * amount;
                         temp.murkColor += _liquidLayers[i].murkColor * amount;
@@ -2868,7 +3405,8 @@ namespace LiquidVolumeFX {
                         i = sortedLayers[j];
                     }
                     // Combine
-                    for (int l = k; l < j; l++) {
+                    for (int l = k; l < j; l++)
+                    {
                         i = sortedLayers[l];
                         _liquidLayers[i].mixedColor = temp.color / temp.amount;
                         _liquidLayers[i].mixedColor2 = temp.murkColor / temp.amount;
@@ -2879,7 +3417,9 @@ namespace LiquidVolumeFX {
                         _liquidLayers[i].baseLevel = groupBaseLevel;
                     }
                     k = j - 1;
-                } else {
+                }
+                else
+                {
                     _liquidLayers[i].mixedColor = _liquidLayers[i].color;
                     _liquidLayers[i].mixedColor2 = _liquidLayers[i].murkColor;
                     _liquidLayers[i].mixedMurkiness = _liquidLayers[i].murkiness;
@@ -2890,11 +3430,13 @@ namespace LiquidVolumeFX {
             }
 
             // Compact
-            for (int k = 0; k < sortedLayersCount - 1; k++) {
+            for (int k = 0; k < sortedLayersCount - 1; k++)
+            {
                 int i = sortedLayers[k];
                 int j = sortedLayers[k + 1];
                 float expectedBaseLevel = _liquidLayers[i].baseLevel + _liquidLayers[i].mixedAmount;
-                if (_liquidLayers[j].baseLevel > expectedBaseLevel) {
+                if (_liquidLayers[j].baseLevel > expectedBaseLevel)
+                {
                     _liquidLayers[j].baseLevel = expectedBaseLevel;
                 }
             }
@@ -2902,71 +3444,102 @@ namespace LiquidVolumeFX {
             AnimateLayers(true);
         }
 
-        int layerComparer(LiquidLayer layer1, LiquidLayer layer2) {
+        int layerComparer(LiquidLayer layer1, LiquidLayer layer2)
+        {
             return layer1.density.CompareTo(layer2.density);
         }
 
-        void AnimateLayers(bool changes = false) {
-            if (Application.isPlaying) {
-                for (int j = 0; j < sortedLayersCount; j++) {
+        void AnimateLayers(bool changes = false)
+        {
+            if (Application.isPlaying)
+            {
+                for (int j = 0; j < sortedLayersCount; j++)
+                {
                     int k = sortedLayers[j];
-                    if (_liquidLayers[k].currentBaseLevel != _liquidLayers[k].baseLevel || _liquidLayers[k].currentAmount != _liquidLayers[k].mixedAmount || _liquidLayers[k].currentMurkiness != _liquidLayers[k].mixedMurkiness || _liquidLayers[k].currentBubblesOpacity != _liquidLayers[k].mixedBubblesOpacity || _liquidLayers[k].currentColor != _liquidLayers[k].mixedColor || _liquidLayers[k].currentColor2 != _liquidLayers[k].mixedColor2) {
+                    if (_liquidLayers[k].currentBaseLevel != _liquidLayers[k].baseLevel || _liquidLayers[k].currentAmount != _liquidLayers[k].mixedAmount || _liquidLayers[k].currentMurkiness != _liquidLayers[k].mixedMurkiness || _liquidLayers[k].currentBubblesOpacity != _liquidLayers[k].mixedBubblesOpacity || _liquidLayers[k].currentColor != _liquidLayers[k].mixedColor || _liquidLayers[k].currentColor2 != _liquidLayers[k].mixedColor2)
+                    {
                         float t = Time.deltaTime * _layersAdjustmentSpeed * _liquidLayers[k].adjustmentSpeed;
-                        if (t > 1f || immediate) {
+                        if (t > 1f || immediate)
+                        {
                             t = 1f;
                         }
-                        if (Similar(_liquidLayers[k].currentBaseLevel, _liquidLayers[k].baseLevel)) {
+                        if (Similar(_liquidLayers[k].currentBaseLevel, _liquidLayers[k].baseLevel))
+                        {
                             _liquidLayers[k].currentBaseLevel = _liquidLayers[k].baseLevel;
-                        } else {
+                        }
+                        else
+                        {
                             _liquidLayers[k].currentBaseLevel = Mathf.Lerp(_liquidLayers[k].currentBaseLevel, _liquidLayers[k].baseLevel, t);
                         }
-                        if (Similar(_liquidLayers[k].currentAmount, _liquidLayers[k].mixedAmount)) {
+                        if (Similar(_liquidLayers[k].currentAmount, _liquidLayers[k].mixedAmount))
+                        {
                             _liquidLayers[k].currentAmount = _liquidLayers[k].mixedAmount;
-                        } else {
+                        }
+                        else
+                        {
                             _liquidLayers[k].currentAmount = Mathf.Lerp(_liquidLayers[k].currentAmount, _liquidLayers[k].mixedAmount, t);
                         }
-                        if (Similar(_liquidLayers[k].currentMurkiness, _liquidLayers[k].mixedMurkiness)) {
+                        if (Similar(_liquidLayers[k].currentMurkiness, _liquidLayers[k].mixedMurkiness))
+                        {
                             _liquidLayers[k].currentMurkiness = _liquidLayers[k].mixedMurkiness;
-                        } else {
+                        }
+                        else
+                        {
                             _liquidLayers[k].currentMurkiness = Mathf.Lerp(_liquidLayers[k].currentMurkiness, _liquidLayers[k].mixedMurkiness, t);
                         }
-                        if (Similar(ref _liquidLayers[k].currentColor, ref _liquidLayers[k].mixedColor)) {
+                        if (Similar(ref _liquidLayers[k].currentColor, ref _liquidLayers[k].mixedColor))
+                        {
                             _liquidLayers[k].currentColor = _liquidLayers[k].mixedColor;
-                        } else {
+                        }
+                        else
+                        {
                             _liquidLayers[k].currentColor = Color.Lerp(_liquidLayers[k].currentColor, _liquidLayers[k].mixedColor, t);
                         }
-                        if (Similar(ref _liquidLayers[k].currentColor2, ref _liquidLayers[k].mixedColor2)) {
+                        if (Similar(ref _liquidLayers[k].currentColor2, ref _liquidLayers[k].mixedColor2))
+                        {
                             _liquidLayers[k].currentColor2 = _liquidLayers[k].mixedColor2;
-                        } else {
+                        }
+                        else
+                        {
                             _liquidLayers[k].currentColor2 = Color.Lerp(_liquidLayers[k].currentColor2, _liquidLayers[k].mixedColor2, t);
                         }
-                        if (Similar(_liquidLayers[k].currentBubblesOpacity, _liquidLayers[k].mixedBubblesOpacity)) {
+                        if (Similar(_liquidLayers[k].currentBubblesOpacity, _liquidLayers[k].mixedBubblesOpacity))
+                        {
                             _liquidLayers[k].currentBubblesOpacity = _liquidLayers[k].mixedBubblesOpacity;
-                        } else {
+                        }
+                        else
+                        {
                             _liquidLayers[k].currentBubblesOpacity = Mathf.Lerp(_liquidLayers[k].currentBubblesOpacity, _liquidLayers[k].mixedBubblesOpacity, t);
                         }
                         changes = true;
                     }
                 }
-                if (changes) {
+                if (changes)
+                {
                     // Compact
-                    if (_layersAdjustmentCompact) {
+                    if (_layersAdjustmentCompact)
+                    {
                         float currentBaseLevel = float.MinValue;
                         float expectedBaseLevel = 0;
-                        for (int k = 0; k < _liquidLayers.Length; k++) {
+                        for (int k = 0; k < _liquidLayers.Length; k++)
+                        {
                             // Get the minimum
                             float minCurrentBaseLevel = float.MaxValue;
                             int min = -1;
-                            for (int j = 0; j < _liquidLayers.Length; j++) {
-                                if (_liquidLayers[j].currentBaseLevel < minCurrentBaseLevel && _liquidLayers[j].currentBaseLevel > currentBaseLevel) {
+                            for (int j = 0; j < _liquidLayers.Length; j++)
+                            {
+                                if (_liquidLayers[j].currentBaseLevel < minCurrentBaseLevel && _liquidLayers[j].currentBaseLevel > currentBaseLevel)
+                                {
                                     minCurrentBaseLevel = _liquidLayers[j].currentBaseLevel;
                                     min = j;
                                 }
                             }
                             if (min < 0)
                                 break;
-                            if (k > 0) {
-                                if (_liquidLayers[min].currentBaseLevel > expectedBaseLevel) {
+                            if (k > 0)
+                            {
+                                if (_liquidLayers[min].currentBaseLevel > expectedBaseLevel)
+                                {
                                     _liquidLayers[min].currentBaseLevel = expectedBaseLevel;
                                 }
                             }
@@ -2975,10 +3548,14 @@ namespace LiquidVolumeFX {
                         }
                     }
                 }
-            } else {
-                for (int j = 0; j < sortedLayersCount; j++) {
+            }
+            else
+            {
+                for (int j = 0; j < sortedLayersCount; j++)
+                {
                     int k = sortedLayers[j];
-                    if (_liquidLayers[k].currentBaseLevel != _liquidLayers[k].baseLevel || _liquidLayers[k].currentAmount != _liquidLayers[k].mixedAmount || _liquidLayers[k].currentMurkiness != _liquidLayers[k].mixedMurkiness || _liquidLayers[k].currentColor != _liquidLayers[k].mixedColor || _liquidLayers[k].currentColor2 != _liquidLayers[k].mixedColor2) {
+                    if (_liquidLayers[k].currentBaseLevel != _liquidLayers[k].baseLevel || _liquidLayers[k].currentAmount != _liquidLayers[k].mixedAmount || _liquidLayers[k].currentMurkiness != _liquidLayers[k].mixedMurkiness || _liquidLayers[k].currentColor != _liquidLayers[k].mixedColor || _liquidLayers[k].currentColor2 != _liquidLayers[k].mixedColor2)
+                    {
                         _liquidLayers[k].currentBaseLevel = _liquidLayers[k].baseLevel;
                         _liquidLayers[k].currentAmount = _liquidLayers[k].mixedAmount;
                         _liquidLayers[k].currentColor = _liquidLayers[k].mixedColor;
@@ -2991,20 +3568,26 @@ namespace LiquidVolumeFX {
             }
             immediate = false;
 
-            if (changes) {
+            if (changes)
+            {
                 UpdateLayersProperties();
             }
         }
 
-        bool Similar(float a, float b) {
-            if (a < b) {
+        bool Similar(float a, float b)
+        {
+            if (a < b)
+            {
                 return (b - a) < 0.01f;
-            } else {
+            }
+            else
+            {
                 return (a - b) < 0.01f;
             }
         }
 
-        bool Similar(ref Color a, ref Color b) {
+        bool Similar(ref Color a, ref Color b)
+        {
             float dr, dg, db, da;
             dr = a.r < b.r ? b.r - a.r : a.r - b.r;
             if (dr > 0.01f)
@@ -3020,32 +3603,39 @@ namespace LiquidVolumeFX {
         }
 
 
-        void UpdateLayersProperties() {
+        void UpdateLayersProperties()
+        {
 
             if (_liquidLayers == null || sortedLayers == null || liqMat == null)
                 return;
 
             const int LAYERS_RESOLUTION = 256;
 
-            if (layersTextureColors == null || layersTextureColors.Length != LAYERS_RESOLUTION) {
+            if (layersTextureColors == null || layersTextureColors.Length != LAYERS_RESOLUTION)
+            {
                 layersTextureColors = new Color[LAYERS_RESOLUTION];
             }
-            if (layersTextureColors2 == null || layersTextureColors2.Length != LAYERS_RESOLUTION) {
+            if (layersTextureColors2 == null || layersTextureColors2.Length != LAYERS_RESOLUTION)
+            {
                 layersTextureColors2 = new Color[LAYERS_RESOLUTION];
             }
-            if (layersTextureColorsTemp == null || layersTextureColorsTemp.Length != LAYERS_RESOLUTION) {
+            if (layersTextureColorsTemp == null || layersTextureColorsTemp.Length != LAYERS_RESOLUTION)
+            {
                 layersTextureColorsTemp = new Color[LAYERS_RESOLUTION];
             }
-            if (layersProperties == null || layersProperties.Length != LAYERS_RESOLUTION) {
+            if (layersProperties == null || layersProperties.Length != LAYERS_RESOLUTION)
+            {
                 layersProperties = new Vector4[LAYERS_RESOLUTION];
             }
-            if (layersSum == null || layersSum.Length != LAYERS_RESOLUTION) {
+            if (layersSum == null || layersSum.Length != LAYERS_RESOLUTION)
+            {
                 layersSum = new float[LAYERS_RESOLUTION];
             }
 
             Color colorNull = new Color(0, 0, 0, 0);
             Vector4 zero = Vector4.zero;
-            for (int j = 0; j < LAYERS_RESOLUTION; j++) {
+            for (int j = 0; j < LAYERS_RESOLUTION; j++)
+            {
                 layersTextureColors[j] = colorNull;
                 layersTextureColors2[j] = colorNull;
                 layersTextureColorsTemp[j] = colorNull;
@@ -3054,10 +3644,12 @@ namespace LiquidVolumeFX {
             }
 
             float level = 0;
-            for (int k = 0; k < sortedLayersCount; k++) {
+            for (int k = 0; k < sortedLayersCount; k++)
+            {
                 float layerBaseLevel = _liquidLayers[k].currentBaseLevel;
                 float layerAmount = _liquidLayers[k].currentAmount;
-                if (layerAmount + layerBaseLevel > 1f) {
+                if (layerAmount + layerBaseLevel > 1f)
+                {
                     layerAmount = 1f - layerBaseLevel;
                     if (layerAmount < 0)
                         layerAmount = 0;
@@ -3066,13 +3658,15 @@ namespace LiquidVolumeFX {
                     level = layerBaseLevel + layerAmount;
             }
 
-            if (level != _level) {
+            if (level != _level)
+            {
                 _level = level;
                 UpdateLevels();
             }
 
             int y = 0, y_next = 0;
-            for (int i = 0; i < sortedLayersCount; i++) {
+            for (int i = 0; i < sortedLayersCount; i++)
+            {
                 int k = sortedLayers[i];
                 Color layerColor = ApplyGlobalAlpha(_liquidLayers[k].currentColor);
                 Color layerColor2 = ApplyGlobalAlpha(_liquidLayers[k].currentColor2);
@@ -3087,8 +3681,10 @@ namespace LiquidVolumeFX {
                 float layerBubblesOpacity = _liquidLayers[k].bubblesOpacity * alpha;
                 y = (int)((levelMultipled - layerBaseLevel) * LAYERS_RESOLUTION);
                 y_next = (int)((levelMultipled - layerBaseLevel - layerAmount) * LAYERS_RESOLUTION);
-                for (int j = y_next; j < y; j++) {
-                    if (j >= 0 && j < LAYERS_RESOLUTION) {
+                for (int j = y_next; j < y; j++)
+                {
+                    if (j >= 0 && j < LAYERS_RESOLUTION)
+                    {
                         layersTextureColors[j] += layerColor;
                         layersTextureColors2[j] += layerColor2;
                         layersProperties[j].x += layerMurkiness;
@@ -3100,9 +3696,11 @@ namespace LiquidVolumeFX {
                 }
             }
 
-            for (int j = 0; j < LAYERS_RESOLUTION; j++) {
+            for (int j = 0; j < LAYERS_RESOLUTION; j++)
+            {
                 float m = layersSum[j];
-                if (m > 0) {
+                if (m > 0)
+                {
                     layersTextureColors[j] /= m;
                     layersTextureColors2[j] /= m;
                     layersProperties[j].x /= m;
@@ -3112,12 +3710,16 @@ namespace LiquidVolumeFX {
             }
 
             // Smooth contact surfaces
-            if (_smoothContactSurface > 0) {
-                for (int j = 0; j < LAYERS_RESOLUTION; j++) {
+            if (_smoothContactSurface > 0)
+            {
+                for (int j = 0; j < LAYERS_RESOLUTION; j++)
+                {
                     Color sum = colorNull;
                     int count = 0;
-                    for (int k = j - _smoothContactSurface; k <= j + _smoothContactSurface; k++) {
-                        if (k >= 0 && k < LAYERS_RESOLUTION) {
+                    for (int k = j - _smoothContactSurface; k <= j + _smoothContactSurface; k++)
+                    {
+                        if (k >= 0 && k < LAYERS_RESOLUTION)
+                        {
                             sum += layersTextureColors[k];
                             count++;
                         }
@@ -3125,7 +3727,8 @@ namespace LiquidVolumeFX {
                     layersTextureColorsTemp[j] = sum / count;
                 }
                 // Blit colors back
-                for (int j = 0; j < LAYERS_RESOLUTION; j++) {
+                for (int j = 0; j < LAYERS_RESOLUTION; j++)
+                {
                     layersTextureColors[j] = layersTextureColorsTemp[j];
                 }
             }
@@ -3136,44 +3739,54 @@ namespace LiquidVolumeFX {
 #if UNITY_WEBGL
             SetLayersTextures();
 #else
-            if (FORCE_GLES_COMPATIBILITY) {
+            if (FORCE_GLES_COMPATIBILITY)
+            {
                 SetLayersTextures();
             }
 #endif
         }
 
-        void UploadMaterialArrays() {
+        void UploadMaterialArrays()
+        {
             liqMat.SetColorArray(ShaderParams.LayersColorArray, layersTextureColors);
             liqMat.SetColorArray(ShaderParams.LayersColor2Array, layersTextureColors2);
             liqMat.SetVectorArray(ShaderParams.LayersProperties, layersProperties);
         }
 
-        void SetLayersTextures() {
-            if (layersPropertiesTex == null) {
+        void SetLayersTextures()
+        {
+            if (layersPropertiesTex == null)
+            {
                 layersPropertiesTex = new Texture2D(1, 256, TextureFormat.RGBAFloat, false, true);
                 layersPropertiesTex.filterMode = FilterMode.Point;
                 layersPropertiesTex.wrapMode = TextureWrapMode.Clamp;
             }
-            if (layersColorsTex == null) {
+            if (layersColorsTex == null)
+            {
                 layersColorsTex = new Texture2D(1, 256, TextureFormat.ARGB32, false);
                 layersColorsTex.filterMode = FilterMode.Point;
                 layersColorsTex.wrapMode = TextureWrapMode.Clamp;
             }
-            if (layersPropertiesTexContents == null || layersPropertiesTexContents.Length < 256) {
+            if (layersPropertiesTexContents == null || layersPropertiesTexContents.Length < 256)
+            {
                 layersPropertiesTexContents = new Color[256];
             }
-            if (layersColorsTexContents == null || layersColorsTexContents.Length < 256) {
+            if (layersColorsTexContents == null || layersColorsTexContents.Length < 256)
+            {
                 layersColorsTexContents = new Color[256];
             }
-            if (layersColors2Tex == null) {
+            if (layersColors2Tex == null)
+            {
                 layersColors2Tex = new Texture2D(1, 256, TextureFormat.ARGB32, false);
                 layersColors2Tex.filterMode = FilterMode.Point;
                 layersColors2Tex.wrapMode = TextureWrapMode.Clamp;
             }
-            if (layersColors2TexContents == null || layersColors2TexContents.Length < 256) {
+            if (layersColors2TexContents == null || layersColors2TexContents.Length < 256)
+            {
                 layersColors2TexContents = new Color[256];
             }
-            for (int k = 0; k < 256; k++) {
+            for (int k = 0; k < 256; k++)
+            {
                 layersPropertiesTexContents[k].r = layersProperties[k].x;
                 layersPropertiesTexContents[k].g = layersProperties[k].y;
                 layersPropertiesTexContents[k].b = layersProperties[k].z;
@@ -3193,9 +3806,12 @@ namespace LiquidVolumeFX {
         }
 
 
-        public void Redraw() {
-            if (_liquidLayers != null) {
-                for (int k = 0; k < _liquidLayers.Length; k++) {
+        public void Redraw()
+        {
+            if (_liquidLayers != null)
+            {
+                for (int k = 0; k < _liquidLayers.Length; k++)
+                {
                     _liquidLayers[k].baseLevel = 0;
                     _liquidLayers[k].currentAmount = 0;
                     _liquidLayers[k].currentBaseLevel = 0;
@@ -3210,13 +3826,16 @@ namespace LiquidVolumeFX {
 
         #region Mesh Displacement
 
-        void CheckMeshDisplacement() {
+        void CheckMeshDisplacement()
+        {
             MeshFilter meshFilter = GetComponent<MeshFilter>();
-            if (meshFilter == null || meshFilter.sharedMesh == null) {
+            if (meshFilter == null || meshFilter.sharedMesh == null)
+            {
                 originalMesh = null;
                 return;
             }
-            if (!_fixMesh) {
+            if (!_fixMesh)
+            {
                 RestoreOriginalMesh();
                 originalMesh = null;
                 return;
@@ -3227,11 +3846,13 @@ namespace LiquidVolumeFX {
             if (!_autoCloseMesh && currentMesh == fixedMesh) return;
 
             // Backup original mesh
-            if (originalMesh == null || !(originalMesh.name.Equals(currentMesh.name))) {
+            if (originalMesh == null || !(originalMesh.name.Equals(currentMesh.name)))
+            {
                 originalMesh = meshFilter.sharedMesh;
             }
 
-            if (currentMesh != originalMesh) {
+            if (currentMesh != originalMesh)
+            {
                 RestoreOriginalMesh();
             }
 
@@ -3240,7 +3861,8 @@ namespace LiquidVolumeFX {
             originalPivotOffset = transform.localPosition - pos;
         }
 
-        void RestoreOriginalMesh() {
+        void RestoreOriginalMesh()
+        {
             fixedMesh = closedMesh = null;
             if (originalMesh == null) return;
 
@@ -3256,12 +3878,14 @@ namespace LiquidVolumeFX {
 
         #region Bubbles support
 
-        void AddBubbles(Texture3D tex) {
+        void AddBubbles(Texture3D tex)
+        {
 
             if (tex == null)
                 return;
 
-            if (_bubblesSizeMax < _bubblesSizeMin) {
+            if (_bubblesSizeMax < _bubblesSizeMin)
+            {
                 _bubblesSizeMax = _bubblesSizeMin;
             }
             int size = tex.width;
@@ -3270,7 +3894,8 @@ namespace LiquidVolumeFX {
             Color[] colors = colors3DWithBubbles[currentNoiseVariation];
 
             // Clear bubble buffer
-            for (int k = 0; k < colors.Length; k++) {
+            for (int k = 0; k < colors.Length; k++)
+            {
                 colors[k].g = 0.5f;
                 colors[k].b = 0.5f;
                 colors[k].a = 0.5f;
@@ -3281,21 +3906,26 @@ namespace LiquidVolumeFX {
 
             // Mark bubble positions
             Vector3 nrm = Vector3.zero;
-            for (int k = 0; k < _bubblesAmount; k++) {
+            for (int k = 0; k < _bubblesAmount; k++)
+            {
                 int bubbleSize = Random.Range(_bubblesSizeMin, _bubblesSizeMax + 1);
                 float bubbleSizeSqr = (float)(bubbleSize * bubbleSize);
                 int y = Random.Range(bubbleSize, size - bubbleSize);
                 int z = Random.Range(bubbleSize, size - bubbleSize);
                 int x = Random.Range(bubbleSize, size - bubbleSize);
-                for (int y2 = y - bubbleSize; y2 <= y + bubbleSize; y2++) {
+                for (int y2 = y - bubbleSize; y2 <= y + bubbleSize; y2++)
+                {
                     float dy = y2 - y;
-                    for (int z2 = z - bubbleSize; z2 <= z + bubbleSize; z2++) {
+                    for (int z2 = z - bubbleSize; z2 <= z + bubbleSize; z2++)
+                    {
                         float dz = z2 - z;
-                        for (int x2 = x - bubbleSize; x2 <= x + bubbleSize; x2++) {
+                        for (int x2 = x - bubbleSize; x2 <= x + bubbleSize; x2++)
+                        {
                             float dx = x2 - x;
                             float dSqr = dy * dy + dz * dz + dx * dx;
                             float d = 1f - dSqr / bubbleSizeSqr;
-                            if (d >= 0) {
+                            if (d >= 0)
+                            {
                                 float l = (float)System.Math.Sqrt(dSqr);
                                 nrm.x = dx / l;
                                 nrm.y = dy / l;
@@ -3319,9 +3949,11 @@ namespace LiquidVolumeFX {
             bool useUnwrappedTexture = FORCE_GLES_COMPATIBILITY;
 #endif
 
-            if (useUnwrappedTexture) {
+            if (useUnwrappedTexture)
+            {
 
-                if (noise3DUnwrapped == null) {
+                if (noise3DUnwrapped == null)
+                {
                     noise3DUnwrapped = new Texture2D(size, size * size, TextureFormat.RGBA32, false, true);
                 }
                 noise3DUnwrapped.SetPixels(colors);
@@ -3335,7 +3967,8 @@ namespace LiquidVolumeFX {
         }
 
 
-        void ClearBubbles(Texture3D tex) {
+        void ClearBubbles(Texture3D tex)
+        {
 
             if (tex == null)
                 return;
@@ -3344,7 +3977,8 @@ namespace LiquidVolumeFX {
             Color[] colors = colors3DWithBubbles[currentNoiseVariation];
 
             // Clear bubble buffer
-            for (int k = 0; k < colors.Length; k++) {
+            for (int k = 0; k < colors.Length; k++)
+            {
                 colors[k].g = 0.5f;
                 colors[k].b = 0.5f;
                 colors[k].a = 0.5f;
@@ -3361,18 +3995,24 @@ namespace LiquidVolumeFX {
 
         #region FP Render Texture comp setting
 
-        public void CheckFPRenderTextureSetting() {
+        public void CheckFPRenderTextureSetting()
+        {
 #if UNITY_EDITOR
             Shader shader = Shader.Find("LiquidVolume/DepthPrePass");
             if (shader == null) return;
             string path = AssetDatabase.GetAssetPath(shader);
             path = System.IO.Path.GetDirectoryName(path) + "/LVLiquidPassBase.cginc";
             string[] lines = System.IO.File.ReadAllLines(path, System.Text.Encoding.UTF8);
-            for (int k = 0; k < lines.Length; k++) {
-                if (lines[k].Contains(SHADER_KEYWORD_FP_RENDER_TEXTURE)) {
-                    if (lines[k].TrimStart().StartsWith("//")) {
+            for (int k = 0; k < lines.Length; k++)
+            {
+                if (lines[k].Contains(SHADER_KEYWORD_FP_RENDER_TEXTURE))
+                {
+                    if (lines[k].TrimStart().StartsWith("//"))
+                    {
                         useFPRenderTextures = false;
-                    } else {
+                    }
+                    else
+                    {
                         useFPRenderTextures = true;
                     }
                     break;

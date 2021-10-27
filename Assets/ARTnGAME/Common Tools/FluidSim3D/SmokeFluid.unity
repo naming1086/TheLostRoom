@@ -126,7 +126,7 @@ NavMeshSettings:
 --- !u!1 &1470411171
 GameObject:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 100004, guid: 9d4133d5d30b644bd87802a347eaccbe, type: 2}
+  m_CorrespondingSourceObject: {fileID: 100004, guid: 9d4133d5d30b644bd87802a347eaccbe, type: 3}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
@@ -143,7 +143,7 @@ GameObject:
 --- !u!20 &1470411176
 Camera:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 2000000, guid: 9d4133d5d30b644bd87802a347eaccbe, type: 2}
+  m_CorrespondingSourceObject: {fileID: 2000000, guid: 9d4133d5d30b644bd87802a347eaccbe, type: 3}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1470411171}
@@ -186,7 +186,7 @@ Camera:
 --- !u!4 &1470411177
 Transform:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 400004, guid: 9d4133d5d30b644bd87802a347eaccbe, type: 2}
+  m_CorrespondingSourceObject: {fileID: 400004, guid: 9d4133d5d30b644bd87802a347eaccbe, type: 3}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1470411171}
@@ -273,6 +273,7 @@ Light:
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
 --- !u!4 &1803253979
@@ -319,6 +320,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 1
@@ -392,13 +394,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 400000, guid: 0b40c0b4ea4208b4792d95085b850676, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 0b40c0b4ea4208b4792d95085b850676, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 4
+    - target: {fileID: 100000, guid: 0b40c0b4ea4208b4792d95085b850676, type: 3}
+      propertyPath: m_Name
+      value: FogKidUp
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 0b40c0b4ea4208b4792d95085b850676, type: 3}
       propertyPath: m_LocalPosition.x
@@ -406,7 +404,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 0b40c0b4ea4208b4792d95085b850676, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.00099993
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 0b40c0b4ea4208b4792d95085b850676, type: 3}
       propertyPath: m_LocalPosition.z
@@ -427,14 +425,6 @@ PrefabInstance:
     - target: {fileID: 400000, guid: 0b40c0b4ea4208b4792d95085b850676, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 0b40c0b4ea4208b4792d95085b850676, type: 3}
-      propertyPath: m_depth
-      value: 64
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 0b40c0b4ea4208b4792d95085b850676, type: 3}
-      propertyPath: m_width
-      value: 64
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b40c0b4ea4208b4792d95085b850676, type: 3}

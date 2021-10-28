@@ -11,6 +11,7 @@ public class SpeakingChecker : MonoBehaviour
     public GameObject fogKidUp;
     public GameObject fogKid;
 
+
     void Awake()
     {
         audio = GetComponent<AudioSource>();
@@ -25,19 +26,14 @@ public class SpeakingChecker : MonoBehaviour
 
     void Update()
     {
-        // 한번 켜진 후에
-        if (soundLampButtonCtrl.onButton)
+        if (soundLampButtonCtrl.touchCount == 2)
         {
-            // 한번 꺼지면 
-            if (!soundLampButtonCtrl.onButton)
-            {
-                voiceParticle.SetActive(false);
-                audio.Stop();
-                audio.loop = true;
-                fogKidUp.SetActive(true);
+            voiceParticle.SetActive(false);
+            audio.Stop();
+            audio.loop = true;
+            fogKidUp.SetActive(true);
 
-                StartCoroutine(OnFogKid());
-            }
+            StartCoroutine(OnFogKid());
         }
     }
 
@@ -47,6 +43,7 @@ public class SpeakingChecker : MonoBehaviour
         if (soundLampButtonCtrl.onButton && coll.CompareTag("MainCamera"))
         {
             voiceParticle.SetActive(true);  // 이펙터 활성화    
+            voiceParticle.GetComponent<ParticleSystem>().Play();
             audio.Play();                   // 오디오 재생
             audio.loop = true;
         }

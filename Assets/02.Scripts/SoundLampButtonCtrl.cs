@@ -17,6 +17,8 @@ public class SoundLampButtonCtrl : MonoBehaviour
     public SoftJointLimit softJointLimit;
     public float limit;
 
+    public int touchCount;
+
     public bool onButton;
 
     void Awake()
@@ -30,6 +32,7 @@ public class SoundLampButtonCtrl : MonoBehaviour
     void Start()
     {
         onButton = false;
+        touchCount = 0;
     }
 
     void Update()
@@ -44,6 +47,11 @@ public class SoundLampButtonCtrl : MonoBehaviour
 
     void OnCollisionEnter(Collision coll)
     {
+        if (coll.collider.CompareTag("RIGHTINDEX"))
+        {
+            touchCount++;
+        }
+
         // 버튼 콜라이더가 오른손의 검지 손가락에 닿고 && 버튼이 off
         if (coll.collider.CompareTag("RIGHTINDEX") && !onButton)
         {

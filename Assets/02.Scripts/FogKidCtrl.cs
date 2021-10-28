@@ -15,6 +15,7 @@ public class FogKidCtrl : MonoBehaviour
 
     void Start()
     {
+        // 안개 아이 생성시 씨앗들 활성화 
         seeds.SetActive(true);
     }
 

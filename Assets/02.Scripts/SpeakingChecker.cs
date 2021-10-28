@@ -4,24 +4,55 @@ using UnityEngine;
 
 public class SpeakingChecker : MonoBehaviour
 {
+    private new AudioSource audio;
+
     public SoundLampButtonCtrl soundLampButtonCtrl;
     public GameObject voiceParticle;
+    public GameObject fogKidUp;
+
+    void Awake()
+    {
+        audio = GetComponent<AudioSource>();
+    }
 
     void Start()
     {
         voiceParticle.SetActive(false);
+        fogKidUp.SetActive(false);
+    }
+
+    void Update()
+    {
+        // 한번 켜진 후에
+        if (soundLampButtonCtrl.onButton)
+        {
+            // 한번 꺼지면 
+            if (!soundLampButtonCtrl.onButton)
+            {
+                voiceParticle.SetActive(false);
+                audio.Stop();
+                audio.loop = true;
+                fogKidUp.SetActive(true);
+            }
+        }
     }
 
     // 녹음 버튼 on && MainCamera 콜라이더와 닿고 있는 동안 이펙터 형성
-    void OnTriggerStay(Collider coll)
+    void OnTriggerEnter(Collider coll)
     {
         if (soundLampButtonCtrl.onButton && coll.CompareTag("MainCamera"))
         {
-            voiceParticle.SetActive(true);
+            voiceParticle.SetActive(true);  // 이펙터 활성화    
+            audio.Play();                   // 오디오 재생
+            audio.loop = true;
         }
-        else
-        {
-            voiceParticle.SetActive(false);
-        }
+    }
+
+    void OnTriggerExit(Collider coll)
+    {
+        // 이펙터 일시정지
+        voiceParticle.GetComponent<ParticleSystem>().Pause();
+        audio.Pause();
+        audio.loop = true;
     }
 }

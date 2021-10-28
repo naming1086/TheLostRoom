@@ -8,7 +8,6 @@ public class SpeakingChecker : MonoBehaviour
 
     public SoundLampButtonCtrl soundLampButtonCtrl;
     public GameObject voiceParticle;
-    public GameObject fogKidUp;
     public GameObject fogKid;
 
 
@@ -20,7 +19,6 @@ public class SpeakingChecker : MonoBehaviour
     void Start()
     {
         voiceParticle.SetActive(false);
-        fogKidUp.SetActive(false);
         fogKid.SetActive(false);
     }
 
@@ -28,10 +26,9 @@ public class SpeakingChecker : MonoBehaviour
     {
         if (soundLampButtonCtrl.touchCount == 2)
         {
-            voiceParticle.SetActive(false);
+            voiceParticle.GetComponent<ParticleSystem>().gravityModifier = -0.28f;
             audio.Stop();
             audio.loop = true;
-            fogKidUp.SetActive(true);
 
             StartCoroutine(OnFogKid());
         }
@@ -60,12 +57,12 @@ public class SpeakingChecker : MonoBehaviour
     // 안개 아이 활성화
     IEnumerator OnFogKid()
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
         fogKid.SetActive(true);
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
-        fogKidUp.SetActive(false);
+        voiceParticle.SetActive(false);
     }
 }

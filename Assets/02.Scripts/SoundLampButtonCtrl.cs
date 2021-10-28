@@ -47,14 +47,10 @@ public class SoundLampButtonCtrl : MonoBehaviour
 
     void OnCollisionEnter(Collision coll)
     {
-        if (coll.collider.CompareTag("RIGHTINDEX"))
-        {
-            touchCount++;
-        }
-
         // 버튼 콜라이더가 오른손의 검지 손가락에 닿고 && 버튼이 off
         if (coll.collider.CompareTag("RIGHTINDEX") && !onButton)
         {
+            touchCount = 1;
             buttonCollider.GetComponent<BoxCollider>().enabled = false;     // 콜라이더 비활성화
             Debug.Log("버튼온");
             //onButton = true;                                              // 버튼 on
@@ -71,6 +67,7 @@ public class SoundLampButtonCtrl : MonoBehaviour
         // 버튼 콜라이더가 오른손의 검지 손가락에 닿고 && 버튼 on
         else if (coll.collider.CompareTag("RIGHTINDEX") && onButton)
         {
+            touchCount = 2;
             Debug.Log("버튼오프");
             audio.PlayOneShot(buttonOff, 1.0f);                             // 버튼 off 사운드 재생
             transform.localPosition = new Vector3(-0.0323f, 0.1039f, 0);    // 위치 이동

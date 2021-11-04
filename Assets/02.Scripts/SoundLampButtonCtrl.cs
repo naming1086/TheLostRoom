@@ -19,7 +19,8 @@ public class SoundLampButtonCtrl : MonoBehaviour
 
     public int touchCount;
 
-    public bool onButton;
+    public bool onRecordButton;     // 녹음 버튼 on
+    public bool onPlayButton;       // 플레이 버튼 on
 
     void Awake()
     {
@@ -31,7 +32,7 @@ public class SoundLampButtonCtrl : MonoBehaviour
 
     void Start()
     {
-        onButton = false;
+        onRecordButton = false;
         touchCount = 0;
     }
 
@@ -48,7 +49,7 @@ public class SoundLampButtonCtrl : MonoBehaviour
     void OnCollisionEnter(Collision coll)
     {
         // 버튼 콜라이더가 오른손의 검지 손가락에 닿고 && 버튼이 off
-        if (coll.collider.CompareTag("RIGHTINDEX") && !onButton)
+        if (coll.collider.CompareTag("INDEX") && !onRecordButton)
         {
             touchCount = 1;
             buttonCollider.GetComponent<BoxCollider>().enabled = false;     // 콜라이더 비활성화
@@ -65,7 +66,7 @@ public class SoundLampButtonCtrl : MonoBehaviour
         }
 
         // 버튼 콜라이더가 오른손의 검지 손가락에 닿고 && 버튼 on
-        else if (coll.collider.CompareTag("RIGHTINDEX") && onButton)
+        else if (coll.collider.CompareTag("INDEX") && onRecordButton)
         {
             touchCount = 2;
             Debug.Log("버튼오프");
@@ -84,11 +85,11 @@ public class SoundLampButtonCtrl : MonoBehaviour
 
     void OnButton()
     {
-        onButton = true;
+        onRecordButton = true;
     }
 
     void OffButton()
     {
-        onButton = false;
+        onRecordButton = false;
     }
 }

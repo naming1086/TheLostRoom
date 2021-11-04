@@ -9,11 +9,12 @@ public class SpeakingChecker : MonoBehaviour
     public SoundLampButtonCtrl soundLampButtonCtrl;
     public GameObject voiceParticle;
     public GameObject fogKid;
-
+    private ParticleSystem voicePS;
 
     void Awake()
     {
         audio = GetComponent<AudioSource>();
+        voicePS = voiceParticle.GetComponent<ParticleSystem>();
     }
 
     void Start()
@@ -24,9 +25,11 @@ public class SpeakingChecker : MonoBehaviour
 
     void Update()
     {
+        var main = voicePS.main;
         if (soundLampButtonCtrl.touchCount == 2)
         {
-            voiceParticle.GetComponent<ParticleSystem>().gravityModifier = -0.28f;
+            main.gravityModifier = -0.5f;
+            main.simulationSpeed = 0.2f;
             audio.Stop();
             audio.loop = true;
 
@@ -37,7 +40,7 @@ public class SpeakingChecker : MonoBehaviour
     // 녹음 버튼 on && MainCamera 콜라이더와 닿고 있는 동안 이펙터 형성
     void OnTriggerEnter(Collider coll)
     {
-        if (soundLampButtonCtrl.onButton && coll.CompareTag("MainCamera"))
+        if (soundLampButtonCtrl.onRecordButton && coll.CompareTag("MainCamera"))
         {
             voiceParticle.SetActive(true);  // 이펙터 활성화    
             voiceParticle.GetComponent<ParticleSystem>().Play();
@@ -57,12 +60,15 @@ public class SpeakingChecker : MonoBehaviour
     // 안개 아이 활성화
     IEnumerator OnFogKid()
     {
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(3.0f);
 
         fogKid.SetActive(true);
 
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(3.0f);
 
         voiceParticle.SetActive(false);
+
+        yield return new WaitForSeconds(5.0f);
+
     }
 }

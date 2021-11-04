@@ -4,9 +4,6 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - RIGHTINDEX
-  - BUTTON
-  - GLASS
   - Flammable
   - Conductor
   - Grass
@@ -17,6 +14,9 @@ TagManager:
   - Butter
   - Freezable
   - Enemy
+  - SEED
+  - FOGSPAWN
+  - INDEX
   layers:
   - Default
   - TransparentFX

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VR.ReadOnlys;
 
 public class FogKidCtrl : MonoBehaviour
 {

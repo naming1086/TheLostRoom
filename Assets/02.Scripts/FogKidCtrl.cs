@@ -46,6 +46,8 @@ public class FogKidCtrl : MonoBehaviour
                     transform.SetParent(null);
                 }
                 StartCoroutine(MoveToStartPos());
+
+                touchCount = 2;
             }
         }
 

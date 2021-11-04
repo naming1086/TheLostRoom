@@ -1,33 +1,39 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Autohand{
+namespace Autohand
+{
     //THIS MAY NOT WORK AS A GRABBABLE AT THIS TIME - Try PhysicsGadgetSlider instead
-    public class PhysicsGadgetButton : PhysicsGadgetConfigurableLimitReader{
+    public class PhysicsGadgetButton : PhysicsGadgetConfigurableLimitReader
+    {
         bool pressed = false;
 
-        [Tooltip("The percentage (0-1) from the required value needed to call the event, if threshold is 0.1 OnPressed will be called at 0.9, and OnUnpressed at 0.1"), Min(0.01f)]
-        public float threshold = 0.1f;
+        [Tooltip("이벤트를 불러오기 위한 수치(0-1), 한계값이 0.1일 경우, OnPressed - 0.9, OnUnpressed - 0.1"), Min(0.01f)]
+        public float threshold = 0.1f;      // 한계값
         public bool lockOnPressed = false;
         [Space]
-        public UnityEvent OnPressed;
-        public UnityEvent OnUnpressed;
+        public UnityEvent OnPressed;        // 눌렸을 때
+        public UnityEvent OnUnpressed;      // 눌리지 않았을 때 
 
         Vector3 startPos;
         Vector3 pressedPos;
         float pressedValue;
 
-        new protected void Start(){
+        new protected void Start()
+        {
             base.Start();
             startPos = transform.localPosition;
         }
 
 
-        protected void FixedUpdate(){
-            if(!pressed && GetValue()+threshold >= 1) {
+        protected void FixedUpdate()
+        {
+            if (!pressed && GetValue() + threshold >= 1)
+            {
                 Pressed();
             }
-            else if(!lockOnPressed && pressed && GetValue()-threshold <= 0){
+            else if (!lockOnPressed && pressed && GetValue() - threshold <= 0)
+            {
                 Unpressed();
             }
 
@@ -39,19 +45,22 @@ namespace Autohand{
         }
 
 
-        public void Pressed() {
+        public void Pressed()
+        {
             pressed = true;
             pressedValue = GetValue();
             pressedPos = transform.localPosition;
             OnPressed?.Invoke();
         }
 
-        public void Unpressed(){
+        public void Unpressed()
+        {
             pressed = false;
             OnUnpressed?.Invoke();
         }
 
-        public void Unlock() {
+        public void Unlock()
+        {
             lockOnPressed = false;
             GetComponent<Rigidbody>().WakeUp();
         }

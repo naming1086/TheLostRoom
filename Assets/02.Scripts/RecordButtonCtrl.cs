@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using VR.ReadOnlys;
 
-public class SoundLampButtonCtrl : MonoBehaviour
+public class RecordButtonCtrl : MonoBehaviour
 {
     public LostStoryRecorder lostStoryRecorder;
 
@@ -22,8 +24,14 @@ public class SoundLampButtonCtrl : MonoBehaviour
     public bool onRecordButton;     // 녹음 버튼 on
     public bool onPlayButton;       // 플레이 버튼 on
 
+    public GameObject fogKid;           // 안개아이
+    public Transform fogKidSpawnPoint;  // 안개아이 생성지점
+
+    public GameObject player;
+
     void Awake()
     {
+        player = GameObject.FindGameObjectWithTag(Defines.TAG_MainCamera);
         audio = GetComponent<AudioSource>();
         animator = GetComponent<Animator>();
         joint = GetComponent<ConfigurableJoint>();
@@ -92,4 +100,16 @@ public class SoundLampButtonCtrl : MonoBehaviour
     {
         onRecordButton = false;
     }
+
+    // playButton을 누르면, FOGSPAWM에 안개아이 생성
+    // OnPressed Event 발생시 호출
+    public void SpawnFogKid()
+    {
+        // 사운드 램프의 하위 오브젝트로 생성
+        GameObject fog = Instantiate(fogKid, transform.position, Quaternion.identity);
+        fog.transform.SetParent(fogKidSpawnPoint);
+    }
+
+
+    // 한번 녹음을 하면 재생 버튼 physics gadgetbutton 활성화
 }

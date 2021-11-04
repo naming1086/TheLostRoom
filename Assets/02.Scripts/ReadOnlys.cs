@@ -23,12 +23,10 @@ namespace VR.ReadOnlys
         ///<summary>검지 손가락 태그</summary>
         public static string TAG_INDEX = "INDEX";
 
-        ///<summary>안개 아이 생성 지점 태그</summary>
-        public static string TAG_FOGSPWAN = "FOGSPAWN";
-
         ///<summary>씨앗 태그</summary>
         public static string TAG_SEED = "SEED";
         #endregion
+
 
 
         #region ErrorMessages
@@ -41,8 +39,10 @@ namespace VR.ReadOnlys
         #endregion
 
 
+
         #region Animation Datas
         #endregion
+
 
 
         #region Time Types

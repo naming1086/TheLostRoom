@@ -15,7 +15,6 @@ TagManager:
   - Freezable
   - Enemy
   - SEED
-  - FOGSPAWN
   - INDEX
   layers:
   - Default

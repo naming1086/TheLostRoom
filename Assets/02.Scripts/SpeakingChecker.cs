@@ -6,7 +6,7 @@ public class SpeakingChecker : MonoBehaviour
 {
     private new AudioSource audio;
 
-    public SoundLampButtonCtrl soundLampButtonCtrl;
+    public RecordButtonCtrl recordButtonCtrl;
     public GameObject voiceParticle;
     public GameObject fogKid;
     private ParticleSystem voicePS;
@@ -26,7 +26,7 @@ public class SpeakingChecker : MonoBehaviour
     void Update()
     {
         var main = voicePS.main;
-        if (soundLampButtonCtrl.touchCount == 2)
+        if (recordButtonCtrl.touchCount == 2)
         {
             main.gravityModifier = -0.5f;
             main.simulationSpeed = 0.2f;
@@ -40,7 +40,7 @@ public class SpeakingChecker : MonoBehaviour
     // 녹음 버튼 on && MainCamera 콜라이더와 닿고 있는 동안 이펙터 형성
     void OnTriggerEnter(Collider coll)
     {
-        if (soundLampButtonCtrl.onRecordButton && coll.CompareTag("MainCamera"))
+        if (recordButtonCtrl.onRecordButton && coll.CompareTag("MainCamera"))
         {
             voiceParticle.SetActive(true);  // 이펙터 활성화    
             voiceParticle.GetComponent<ParticleSystem>().Play();

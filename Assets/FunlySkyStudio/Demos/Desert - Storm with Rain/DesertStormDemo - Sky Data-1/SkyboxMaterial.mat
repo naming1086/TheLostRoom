@@ -80,6 +80,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _CloudAlpha: 1
     - _CloudCubemapDoubleLayerHeight: 0
@@ -178,3 +179,4 @@ Material:
     - _SunColor: {r: 0.66, g: 0.65, b: 0.55, a: 1}
     - _SunPosition: {r: 0, g: 0, b: 0, a: 0}
     - _SunSpriteDimensions: {r: 0, g: 0, b: 0, a: 0}
+  m_BuildTextureStacks: []

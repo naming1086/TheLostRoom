@@ -62,22 +62,22 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _EdgePosition: 1
-    - _FadeEnd: -0.559
-    - _FadeStart: 0.858
+    - _FadeEnd: -0.361
+    - _FadeStart: 0.712
     - _FrontFactor: 0
     - _Glossiness: 0.5
     - _GlowEnd: 0.07
     - _GlowEndEnd: 0
     - _GlowStart: 0.33
     - _GlowStartEnd: 0.3
-    - _Intensity: 0.692
+    - _Intensity: 0.567
     - _InvFade: 1
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _SrcBlend: 1
-    - _Thickness: 0.473
+    - _Thickness: 0.606
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:

@@ -25,6 +25,15 @@ namespace VR.ReadOnlys
 
         ///<summary>씨앗 태그</summary>
         public static string TAG_SEED = "SEED";
+
+        ///<summary>잃어버린 방 BGM 태그</summary>
+        public static string Tag_BGM_LOSTROOM = "LOSTROOMBGM";
+
+        ///<summary>행성 BGM 태그</summary>
+        public static string Tag_BGM_PLANETBGM = "PLANETBGM";
+
+        ///<summary>효과음 태그</summary>
+        public static string Tag_SOUNDEFFECT = "SOUNDEFFECT";
         #endregion
 
 
@@ -35,6 +44,7 @@ namespace VR.ReadOnlys
 
         // 사운드 에러
         public static string ERROR_NO_AUDIOCLIPDATA = "해당 클립 이름에 해당하는 사운드 데이터가 없습니다. 사운드 매니저에 추가해 주세요.";
+        public static string ERROR_NO_PLANETID_FOR_PARA = "행성 ID를 매개 변수로 전달해야 합니다.";
         public static string ERROR_MISSING_SOUNDCTRL = "사운드 컨트롤을 찾을 수 없습니다.";
         #endregion
 

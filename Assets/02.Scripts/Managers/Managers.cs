@@ -9,12 +9,13 @@ public class Managers : MonoBehaviour
     public static Managers instance;
 
     // 행성 매니저 
-
+    public PlanetManager PlanetManager { get; set; }
     // 씬 매니저
 
     // 모드 매니저 
 
     // 사운드 매니저 
+    public SoundManager SoundManager { get; set; }
 
     // 메뉴 매니저
 
@@ -59,6 +60,8 @@ public class Managers : MonoBehaviour
 
     void Initialize()
     {
+        SoundManager = FindObjectOfType<SoundManager>(true);
+
         onManagerSetDone.Invoke();
     }
 }

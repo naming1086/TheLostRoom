@@ -16,6 +16,9 @@ TagManager:
   - Enemy
   - SEED
   - INDEX
+  - LOSTROOMBGM
+  - PLANETBGM
+  - SOUNDEFFECT
   layers:
   - Default
   - TransparentFX
